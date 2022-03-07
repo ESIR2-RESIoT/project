@@ -24,16 +24,14 @@
             </ul>
             </div>
             <div class="row justify-content-start" style="padding-top:100px;">
-                <button class="btn btn-success btn-lg btn-block" onclick="startChenillard()">Lancer le chenillard</button>
+                <button class="btn btn-success btn-lg btn-block">Lancer le chenillard</button>
                 <button class="btn btn-danger btn-lg btn-block">Stopper le chenillard</button>
                 <button class="btn btn-dark btn-lg btn-block">Changer le sens du chenillard</button>
-                <div class="d-grid gap-2"> 
-                    <p>Changer la vitesse du chenillard :</p>
-                    <a href="#" class="btn btn-secondary btn-lg" role="button" aria-pressed="true">25%</a>
-                    <a href="#" class="btn btn-info btn-lg" role="button" aria-pressed="true">50%</a>
-                    <a href="#" class="btn btn-primary btn-lg" role="button" aria-pressed="true">75%</a>
-                    <a href="#" class="btn btn-warning btn-lg" role="button" aria-pressed="true">100%</a>
-                </div>  
+                <p>Changer la vitesse du chenillard :</p>   
+                <a href="#" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">25%</a>
+                <a href="#" class="btn btn-info btn-lg active" role="button" aria-pressed="true">50%</a>
+                <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">75%</a>
+                <a href="#" class="btn btn-warning btn-lg active" role="button" aria-pressed="true">100%</a>
             </div>
             <div class="row justify-content-start" style="padding-top:10px;">
                 <div class="col" style="padding-top:250px;">
@@ -47,10 +45,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function startChenillard() {
-            return HtmlService.createHtmlOutputFromFile('Index');
-        }
-    </script>
 </body>
