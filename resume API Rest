@@ -1,0 +1,10 @@
+https://www.youtube.com/watch?v=OgaxgYpsTdg&list=PLI_v6fVEk4zCP2NRWEh2ehurwlejMk3KW&index=20
+architecture rest, comment on concois une API rest
+Pk faire? Rendre accessible a l'exterieur un bout de logiciel, et peu etre appelé par un autre bout de logiciel connecté a Internet
+1. Les ressources doivent etre sur Internet avec un URL unique(URI) pour l'identifier
+2. Utiliser le protocole de communication HTTP
+3. Requete(GET/recuperer ressource POST/creer ressource PUT/maj ressource DELETE suppr ressource) Reponse Affichage
+
+https://www.youtube.com/watch?v=PyIzRB9uHNQ&list=PLI_v6fVEk4zCP2NRWEh2ehurwlejMk3KW&index=21
+Comment creer une API rest
+1. Creer une URI pour chaque ressource avec MIMS (text/html, picture/gif, picture/jpg)
