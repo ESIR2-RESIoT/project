@@ -11,7 +11,7 @@ public class SimplestServer {
         http.setPort(8080);
         http.setIdleTimeout(30000);
         server.addConnector(http);
-        server.setHandler(new HelloHandler());
+        server.setHandler(new IndexHandler());
         server.start();
         server.join();
     }
