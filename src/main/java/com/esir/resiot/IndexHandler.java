@@ -3,8 +3,8 @@ package com.esir.resiot;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
+import java.nio.Buffer;
 
 import com.google.common.io.Resources;
 import jakarta.servlet.ServletException;
@@ -26,19 +26,16 @@ public class IndexHandler extends AbstractHandler
     {
         System.out.println("----------handling request----------");
         System.out.println("Method: "+request.getMethod());
-        System.out.println("URL   : "+request.getRequestURL());
+        System.out.println("Target: "+target);
+        StringBuilder body = Utils.readBody(request);
+        System.out.println("Body  : "+body);
+
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
         baseRequest.setHandled(true);
-        URL url = Resources.getResource("index.html"); // La page à afficher au client se trouve dans nos ressources
-        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream())); // Il faut la convertir en StringBuffer pour pouvoir l'envoyer
-        StringBuffer sb = new StringBuffer();
-        String line;
-        while((line=Utils.readBuffer(in, 2048))!=null) {
-            sb.append(line);
-        }
 
-        response.getWriter().println(sb);
+        StringBuffer stringBuffer = Utils.sendBuffer("index.html");
+        response.getWriter().println(stringBuffer);
 
         /* Exemple de fonction handle de la doc
         response.setContentType("text/html;charset=utf-8");
