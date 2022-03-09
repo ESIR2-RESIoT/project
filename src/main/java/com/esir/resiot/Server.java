@@ -1,11 +1,11 @@
 package com.esir.resiot;
 
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 
-public class SimplestServer {
+
+public class Server {
     public static void main(String[] args) throws Exception {
-        Server server = new Server();
+        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
         ServerConnector http = new ServerConnector(server);
         http.setHost("localhost");
         http.setPort(8080);

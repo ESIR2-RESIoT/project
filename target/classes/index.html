@@ -24,14 +24,16 @@
             </ul>
             </div>
             <div class="row justify-content-start" style="padding-top:100px;">
-                <button class="btn btn-success btn-lg btn-block">Lancer le chenillard</button>
+                <button class="btn btn-success btn-lg btn-block" onclick="startChenillard()">Lancer le chenillard</button>
                 <button class="btn btn-danger btn-lg btn-block">Stopper le chenillard</button>
                 <button class="btn btn-dark btn-lg btn-block">Changer le sens du chenillard</button>
-                <p>Changer la vitesse du chenillard :</p>   
-                <a href="#" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">25%</a>
-                <a href="#" class="btn btn-info btn-lg active" role="button" aria-pressed="true">50%</a>
-                <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">75%</a>
-                <a href="#" class="btn btn-warning btn-lg active" role="button" aria-pressed="true">100%</a>
+                <div class="d-grid gap-2"> 
+                    <p>Changer la vitesse du chenillard :</p>
+                    <a href="#" class="btn btn-secondary btn-lg" role="button" aria-pressed="true" onclick="httpPost('25%')">25%</a>
+                    <a href="#" class="btn btn-info btn-lg" role="button" aria-pressed="true">50%</a>
+                    <a href="#" class="btn btn-primary btn-lg" role="button" aria-pressed="true">75%</a>
+                    <a href="#" class="btn btn-warning btn-lg" role="button" aria-pressed="true">100%</a>
+                </div>  
             </div>
             <div class="row justify-content-start" style="padding-top:10px;">
                 <div class="col" style="padding-top:250px;">
@@ -45,4 +47,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function httpPost(data){
+            url = "http://localhost:8080/";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            console.log("sending post");
+            xhr.send(JSON.stringify({
+            value: JSON.stringify(data)
+            }));
+        }
+    </script>
 </body>
