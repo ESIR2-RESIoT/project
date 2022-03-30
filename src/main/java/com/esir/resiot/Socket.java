@@ -10,8 +10,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
-import java.io.IOException;
-
 @WebSocket
 public class Socket
 {
@@ -32,6 +30,7 @@ public class Socket
         this.session = session;
         this.remote = this.session.getRemote();
         LOG.info("WebSocket Connect: {}",session);
+
         this.remote.sendStringByFuture("You are now connected to " + this.getClass().getName());
     }
 

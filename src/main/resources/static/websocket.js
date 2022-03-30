@@ -20,13 +20,13 @@ function getKeyCode(ev) {
 }
 
 var wstool = {
+
+    // Ouverture de websocket client
     connect : function() {
-        var location = document.location.toString().replace('http://', 'ws://') + "echo";
+        var location = document.location.toString().replace('http://', 'ws://') + "test";
 
-        wstool.info("Document URI: " + document.location);
-        wstool.info("WS URI: " + location);
-
-        this._scount = 0;
+        wstool.log("info", "Document URI: " + document.location);
+        wstool.log("info", "WS URI: " + location);
 
         try {
             this._ws = new WebSocket(location);
@@ -34,68 +34,55 @@ var wstool = {
             this._ws.onmessage = this._onmessage;
             this._ws.onclose = this._onclose;
         } catch (exception) {
-            wstool.info("Connect Error: " + exception);
+            wstool.log("error", "Connect Error: " + exception);
         }
     },
 
+    // Fermeture du websocket
     close : function() {
         this._ws.close(1000);
     },
 
-    _out : function(type, message) {
-        console.log("["+type+"] "+message)
-    },
-
+    // Accessibilité des boutons selon l'état de la connexion
     setState : function(enabled) {
         $('connect').disabled = enabled;
         $('close').disabled = !enabled;
         $('hello').disabled = !enabled;
     },
 
-    info : function(message) {
-        wstool._out("info", message);
+    // Debug côté client
+    log: function(type, message){
+        console.log("["+type+"] "+message)
     },
 
-    error : function(message) {
-        wstool._out("error", message);
-    },
-
-    infoc : function(message) {
-        wstool._out("client", "[c] " + message);
-    },
-
-    infos : function(message) {
-        this._scount++;
-        wstool._out("server", "[s" + this._scount + "] " + message);
-    },
-
+    // A l'ouverture du websocket
     _onopen : function() {
         wstool.setState(true);
-        wstool.info("Websocket Connected");
+        wstool.log("info", "Websocket Connected");
     },
 
+    // Communication client -> serveur
     _send : function(message) {
         if (this._ws) {
             this._ws.send(message);
-            wstool.infoc(message);
+            wstool.log("client", message);
         }
     },
 
-    write : function(text) {
-        wstool._send(text);
-    },
-
+    // Communication serveur -> client
     _onmessage : function(m) {
         if (m.data) {
-            wstool.infos(m.data);
+            wstool.log("server", m.data);
+
         }
     },
 
+    // Fermeture du websocket
     _onclose : function(closeEvent) {
         this._ws = null;
         wstool.setState(false);
-        wstool.info("Websocket Closed");
-        wstool.info("  .wasClean = " + closeEvent.wasClean);
+        wstool.log("info", "Websocket Closed");
+        wstool.log("info", "  .wasClean = " + closeEvent.wasClean);
 
         var codeMap = {};
         codeMap[1000] = "(NORMAL)";
@@ -112,7 +99,7 @@ var wstool = {
         codeMap[1011] = "(SERVER/UNEXPECTED_CONDITION)";
         codeMap[1015] = "(INTERNAL/TLS_ERROR)";
         var codeStr = codeMap[closeEvent.code];
-        wstool.info("  .code = " + closeEvent.code + "  " + codeStr);
-        wstool.info("  .reason = " + closeEvent.reason);
+        wstool.log("info", "Code = " + closeEvent.code + "  " + codeStr);
+        wstool.log("info", "Reason = " + closeEvent.reason);
     }
 };

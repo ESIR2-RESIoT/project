@@ -13,7 +13,7 @@
 <script type="text/javascript">
     $("connect").onclick = function(event) { wstool.connect(); return false; }
     $("close").onclick = function(event) { wstool.close(); return false; }
-    $("hello").onclick = function(event) { wstool.write("Hello There"); return false; }
+    $("hello").onclick = function(event) { wstool._send("Hello There"); return false; }
     </script>
 </body>
 </html>
