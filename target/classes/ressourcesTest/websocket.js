@@ -24,7 +24,6 @@ var wstool = {
     // Ouverture de websocket client
     connect : function() {
         var location = document.location.toString().replace('http://', 'ws://') + "test";
-
         wstool.log("info", "Document URI: " + document.location);
         wstool.log("info", "WS URI: " + location);
 
@@ -33,6 +32,7 @@ var wstool = {
             this._ws.onopen = this._onopen;
             this._ws.onmessage = this._onmessage;
             this._ws.onclose = this._onclose;
+            this._ws.url = "ws://localhost:8080/"
         } catch (exception) {
             wstool.log("error", "Connect Error: " + exception);
         }
@@ -47,7 +47,7 @@ var wstool = {
     setState : function(enabled) {
         $('connect').disabled = enabled;
         $('close').disabled = !enabled;
-        $('hello').disabled = !enabled;
+        $('send').disabled = !enabled;
     },
 
     // Debug côté client
@@ -73,7 +73,6 @@ var wstool = {
     _onmessage : function(m) {
         if (m.data) {
             wstool.log("server", m.data);
-
         }
     },
 

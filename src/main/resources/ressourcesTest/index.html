@@ -1,0 +1,24 @@
+<meta charset="utf-8"/>
+<html>
+<head>
+    <title>Jetty WebSocket Echo Examples</title>
+    <script type="text/javascript" src="websocket.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css" media="all" >
+</head>
+<body>
+<div id="buttons">
+    <input id="connect" class="button" type="submit" name="Connexion" value="Connexion"/>
+    <input id="close" class="button" type="submit" name="close" value="Déconnexion" disabled="disabled"/>
+    <input id="textbox" type="text" size="20"/>
+    <input id="send" class="button" type="submit" name="send" value="Envoyer" disabled="disabled"/>
+
+
+</div>
+<script type="text/javascript">
+    $("connect").onclick = function(event) {wstool.connect(); return false; }
+    $("close").onclick = function(event) { wstool.close(); return false; }
+    $("send").onclick = function(event) { wstool._send($F("textbox")); return false; }
+
+    </script>
+</body>
+</html>
