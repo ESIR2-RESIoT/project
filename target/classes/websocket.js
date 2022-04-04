@@ -69,9 +69,9 @@ var wstool = {
     },
 
     // Communication client -> serveur
-    _send : function(command, args) {
+    _send : function(command, arg) {
         if (this._ws) {
-            let message = JSON.stringify({"command":command, "args":args})
+            let message = JSON.stringify({"command":command, "arg":arg})
             this._ws.send(message);
             wstool.log("client", message);
         }

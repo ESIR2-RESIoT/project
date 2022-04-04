@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" 
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script type="text/javascript" src="websocket.js"></script>
-    <script type="text/javascript" src="main.js"></script>
 
 </head>
 <body>
@@ -61,13 +60,13 @@
     <script type="text/javascript">
     $("connect").onclick = function(event) { wstool.connect() }
     $("disconnect").onclick = function(event) { wstool.close() }
-    $("startChenillard").onclick = function(event) { wstool._send("etat",true)  }
-    $("stopChenillard").onclick = function(event) { wstool._send("etat",false) }
-    $("sensChenillard").onclick = function(event) { wstool._send("sens","") }
-    $("speed25").onclick = function(event) { wstool._send("vitesse",0.25) }
-    $("speed50").onclick = function(event) { wstool._send("vitesse",0.5) }
-    $("speed75").onclick = function(event) { wstool._send("vitesse",0.75) }
-    $("speed100").onclick = function(event) { wstool._send("vitesse",1) }
+    $("startChenillard").onclick = function(event) { wstool._send("changeState","true")  }
+    $("stopChenillard").onclick = function(event) { wstool._send("changeState","false") }
+    $("sensChenillard").onclick = function(event) { wstool._send("changeDirection","") }
+    $("speed25").onclick = function(event) { wstool._send("changeSpeed","0.25") }
+    $("speed50").onclick = function(event) { wstool._send("changeSpeed","0.5") }
+    $("speed75").onclick = function(event) { wstool._send("changeSpeed","0.75") }
+    $("speed100").onclick = function(event) { wstool._send("changeSpeed","1") }
 
     </script>
 </body>

@@ -15,6 +15,7 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     private static final Logger LOG = Log.getLogger(Websocket.class);
     private Session session;
     private RemoteEndpoint.Async remote;
+    private final KNXHandler knxHandler = new KNXHandler(remote);
 
     @Override
     public void onClose(Session session, CloseReason close)
@@ -29,6 +30,7 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     {
         this.session = session;
         this.remote = this.session.getAsyncRemote();
+        knxHandler.setRemote(this.remote);
         LOG.info("WebSocket Connect: {}",session);
         this.remote.sendText("You are now connected to " + this.getClass().getName());
         // attach echo message handler
@@ -45,10 +47,9 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     @Override
     public void onMessage(String message)
     {
-        LOG.info("Echoing back text message [{}]",message);
         if (this.session != null && this.session.isOpen() && this.remote != null)
         {
-            this.remote.sendText(message);
+            knxHandler.processRequest(message);
         }
     }
 }
