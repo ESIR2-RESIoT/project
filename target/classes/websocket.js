@@ -78,9 +78,15 @@ var wstool = {
     },
 
     // Communication serveur -> client
-    _onmessage : function(m) {
+_onmessage : function(m) {
         if (m.data) {
             wstool.log("server", m.data);
+            var response = JSON.parse(m.data);
+            var leds = ["led1","led2","led3","led4"]
+            for(let i = 0; i < 4; i++){
+                response[i] = response[i] ? "images/led_green.png" : "images/led_red.png"
+                $(leds[i]).setAttribute("src",response[i])
+            }
         }
     },
 

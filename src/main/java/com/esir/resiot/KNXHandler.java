@@ -11,13 +11,11 @@ public class KNXHandler {
 
     private static final Logger LOG = Log.getLogger(Websocket.class);
     private static final GsonBuilder builder = new GsonBuilder();
-    private RemoteEndpoint.Async remote;
 
-    private ThreadChenillard thread;
+    private final ThreadChenillard thread;
 
 
     public KNXHandler(RemoteEndpoint.Async remote) {
-        this.remote = remote;
         thread = new ThreadChenillard(remote);
         thread.start();
     }
@@ -25,54 +23,24 @@ public class KNXHandler {
     public void processRequest(String message){
         Gson gson = builder.create();
         ClientCommand clientCommand = gson.fromJson(message, ClientCommand.class);
+
         switch(clientCommand.getCommand()){
             case "changeState":
-                this.changeState(Boolean.parseBoolean(clientCommand.getArg()));
+                if(Boolean.parseBoolean(clientCommand.getArg())){
+                    LOG.info("Starting chaser");
+                }else{
+                    LOG.info("Stopping chaser");
+                }
+                thread.changeThreadState();
                 break;
+
             case "changeDirection":
-                this.changeDirection();
+                thread.changeChaserDirection();
                 break;
 
             case "changeSpeed":
-                this.changeSpeed(Double.parseDouble(clientCommand.getArg()));
+                thread.changeChaserSpeed(Double.parseDouble(clientCommand.getArg()));
                 break;
         }
-        remote.sendText(message);
-    }
-
-    private void changeState(boolean state){
-        if(state){
-            LOG.info("Starting chaser");
-            Gson gson = builder.create();
-            boolean[] chaserArray = {true, false, false, false};
-            String toSend = gson.toJson(chaserArray);
-            this.remote.sendText(toSend);
-        }else{
-            LOG.info("Stopping chaser");
-            Gson gson = builder.create();
-            boolean[] chaserArray = {false, true, false, false};
-            String toSend = gson.toJson(chaserArray);
-            this.remote.sendText(toSend);
-        }
-
-        thread.changeThreadState();
-    }
-
-    private void changeDirection(){
-        Gson gson = builder.create();
-        boolean[] chaserArray = {false, false, true, false};
-        String toSend = gson.toJson(chaserArray);
-        this.remote.sendText(toSend);
-
-        thread.changeChaserDirection();
-    }
-
-    private void changeSpeed(double speed){
-        Gson gson = builder.create();
-        boolean[] chaserArray = {false, false, false, true};
-        String toSend = gson.toJson(chaserArray);
-        this.remote.sendText(toSend);
-
-        thread.changeChaserSpeed(speed);
     }
 }
