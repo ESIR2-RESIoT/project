@@ -15,7 +15,7 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     private static final Logger LOG = Log.getLogger(Websocket.class);
     private Session session;
     private RemoteEndpoint.Async remote;
-    private final KNXHandler knxHandler = new KNXHandler(remote);
+    private final KNXHandler knxHandler = new KNXHandler();
 
     @Override
     public void onClose(Session session, CloseReason close)

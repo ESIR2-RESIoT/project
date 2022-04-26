@@ -8,14 +8,14 @@ public class ChenillardThread extends Thread {
     EnumMotif motif = EnumMotif.normal;
 
     public ChenillardThread(KNXConnection knx) {
-        System.out.println("Launching New Chenillard");
+        System.out.println("Creating chaser");
         this.knx = knx;
         pause = false;
         timer = 1000;
     }
 
     public void playChenillard(){
-        System.out.println("Play chenillard");
+        System.out.println("Starting chaser");
         i= 0;
         stop = false;
         isAlreadyStop = false;
