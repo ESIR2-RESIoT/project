@@ -23,7 +23,7 @@ var wstool = {
 
     // Ouverture de websocket client
     connect : function() {
-        var location = document.location.toString().replace('http://', 'ws://') + "test";
+        var location = document.location.toString().replace('http://', 'ws://');
         wstool.log("info", "Document URI: " + document.location);
         wstool.log("info", "WS URI: " + location);
 

@@ -23,7 +23,7 @@ var wstool = {
 
     // Ouverture de websocket client
     connect : function() {
-        var location = document.location.toString().replace('http://', 'ws://') + "test";
+        var location = document.location.toString().replace('http://', 'ws://');
         wstool.log("info", "Document URI: " + document.location);
         wstool.log("info", "WS URI: " + location);
 
@@ -81,6 +81,25 @@ var wstool = {
     _onmessage : function(m) {
         if (m.data) {
             wstool.log("server", m.data);
+            var led1, led2, led3, led4;
+            String[] knxLED = {"true","false","false","false"};
+            if (knxLED[0] == true){
+                led1 = "images/led_green.png";
+
+            }else led1 = "images/led_red.png";
+            if (knxLED[1] == true){
+                led1 = "images/led_green.png";
+
+            }else led1 = "images/led_red.png";
+            if (knxLED[2] == true){
+                led1 = "images/led_green.png";
+
+            }else led1 = "images/led_red.png";
+            if (knxLED[3] == true){
+                led1 = "images/led_green.png";
+
+            }else led1 = "images/led_red.png";
+
         }
     },
 
