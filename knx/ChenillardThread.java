@@ -98,7 +98,7 @@ public class ChenillardThread extends Thread {
                     knx.writeKNXdata("0/0/3", false);
                     knx.writeKNXdata("0/0/4", false);
                     isAlreadyStop = true;
-                }  
+                }
             }
         }
     }
