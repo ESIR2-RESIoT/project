@@ -83,7 +83,9 @@ public class ThreadChenillard extends Thread {
                 if(activeLed == -1){ // Cas particulier : initialisation (nécessaire sinon le chenillard risque de commencer sur une mauvaise led
                     activeLed = 0;
                 }else{ // Détermination de la LED à allumer
+
                     // TODO : KNX - Eteindre la led d'indice activeLed
+
                     switch(this.direction){
                         case L2R:
                             activeLed = (activeLed == 3) ? 0 : activeLed+1;
@@ -113,6 +115,7 @@ public class ThreadChenillard extends Thread {
                 }
 
                 // TODO : KNX - Allumer la led d'indice activeLed
+
                 boolean[] LEDs = new boolean[4];
                 Arrays.fill(LEDs, Boolean.FALSE);
                 LEDs[activeLed] = true;

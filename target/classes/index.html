@@ -11,6 +11,8 @@
 <body>
 <div class="container body-content">
     <div class="container">
+        <input type="button" id="test" class="btn btn-success btn-lg btn-block"
+               value="test" onclick="" disabled="disabled">
         <div class="row justify-content-center" style="padding-top:10px;">
             <h1>Projet RESIoT</h1>
         </div>
@@ -80,6 +82,7 @@
     </div>
 </div>
 <script type="text/javascript">
+    $("test").onclick = function(event) { wstool._test() }
     $("connect").onclick = function(event) { wstool.connect() }
     $("disconnect").onclick = function(event) { wstool.close() }
     $("startChenillard").onclick = function(event) { wstool._send("changeState","true")  }

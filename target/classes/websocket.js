@@ -62,6 +62,16 @@ var wstool = {
         console.log("["+type+"] "+message)
     },
 
+    _test : function(){
+        var url = "http://localhost:8080/"
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+        value: JSON.stringify(data)
+        }));
+    }
+
     // A l'ouverture du websocket
     _onopen : function() {
         wstool.setState(true);
@@ -81,7 +91,7 @@ var wstool = {
     },
 
     // Communication serveur -> client
-_onmessage : function(m) {
+    _onmessage : function(m) {
         if (m.data) {
             //wstool.log("server", m.data);
             var response = JSON.parse(m.data);
