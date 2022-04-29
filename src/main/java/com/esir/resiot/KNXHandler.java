@@ -28,10 +28,12 @@ public class KNXHandler {
             case "changeState":
                 if(Boolean.parseBoolean(clientCommand.getArg())){
                     LOG.info("Starting chaser");
+                    thread.changeThreadState(true);
                 }else{
                     LOG.info("Stopping chaser");
+                    thread.changeThreadState(false);
                 }
-                thread.changeThreadState();
+
                 break;
 
             case "changeDirection":

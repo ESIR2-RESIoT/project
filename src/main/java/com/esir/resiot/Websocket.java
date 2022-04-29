@@ -7,6 +7,8 @@ import javax.websocket.MessageHandler;
 import javax.websocket.RemoteEndpoint;
 import javax.websocket.Session;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 
@@ -32,7 +34,10 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         this.remote = this.session.getAsyncRemote();
         knxHandler = new KNXHandler(this.remote);
         LOG.info("WebSocket Connect: {}",session);
-        this.remote.sendText("You are now connected to " + this.getClass().getName());
+        ServerCommand toSend = new ServerCommand("info", "You are now connected to " + this.getClass().getName());
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        this.remote.sendText(gson.toJson(toSend));
         // attach echo message handler
         session.addMessageHandler(this);
     }

@@ -23,7 +23,7 @@ var wstool = {
 
     // Ouverture de websocket client
     connect : function() {
-        var location = document.location.toString().replace('http://', 'ws://');
+        var location = document.location.toString().replace('http://', 'ws://') + "test";
         wstool.log("info", "Document URI: " + document.location);
         wstool.log("info", "WS URI: " + location);
 
@@ -66,6 +66,9 @@ var wstool = {
     _onopen : function() {
         wstool.setState(true);
         wstool.log("info", "Websocket Connected");
+        $("statusLabel").innerHTML = "Etat : <strong>Arrêt</strong>"
+        $("speedLabel").innerHTML = "Vitesse : <strong>0%</strong>"
+        $("directionLabel").innerHTML = "Sens : <strong>-</strong>"
     },
 
     // Communication client -> serveur
@@ -80,12 +83,31 @@ var wstool = {
     // Communication serveur -> client
 _onmessage : function(m) {
         if (m.data) {
-            wstool.log("server", m.data);
+            //wstool.log("server", m.data);
             var response = JSON.parse(m.data);
-            var leds = ["led1","led2","led3","led4"]
-            for(let i = 0; i < 4; i++){
-                response[i] = response[i] ? "images/led_green.png" : "images/led_red.png"
-                $(leds[i]).setAttribute("src",response[i])
+            console.log(response);
+
+            switch(response.command){
+                case "LEDStatus":
+                    for(let i = 0; i < 4; i++){
+                        let color = response.args[i] ? "images/led_green.png" : "images/led_red.png"
+                        $("led"+i).setAttribute("src",color)
+                    }
+                    break;
+
+                case "status":
+                    let status = response.args ? "Marche" : "Arrêt"
+                    $("statusLabel").innerHTML = "Etat : <strong>"+status+"</strong>"
+                    break;
+
+                case "direction":
+                    $("directionLabel").innerHTML = "Direction : <strong>"+response.args+"</strong>"
+                    break;
+
+                case "speed":
+                    $("speedLabel").innerHTML = "Vitesse : <strong>"+(100*response.args)+"%</strong>"
+
+                    break;
             }
         }
     },
@@ -114,5 +136,10 @@ _onmessage : function(m) {
         var codeStr = codeMap[closeEvent.code];
         wstool.log("info", "Code = " + closeEvent.code + "  " + codeStr);
         wstool.log("info", "Reason = " + closeEvent.reason);
+        $("statusLabel").innerHTML = "Etat : <strong>Déconnecté</strong>"
+        $("speedLabel").innerHTML = ""
+        $("directionLabel").innerHTML = ""
+
+
     }
 };

@@ -7,61 +7,117 @@ import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class ThreadChenillard extends Thread {
     private static final Logger LOG = Log.getLogger(Websocket.class);
     private static final GsonBuilder builder = new GsonBuilder();
+    private static final Gson gson = builder.create();
+
+
+    public enum Directions{
+        L2R("Gauche -> Droite"),
+        R2L("Droite -> Gauche"),
+        L_R("Gauche <-> Droite"),
+        RANDOM("Aléatoire");
+
+        static public final Directions[] values = values();
+        public final String label;
+
+        private Directions(String label) {
+            this.label = label;
+        }
+        /*
+        public Directions previous() { return values[(ordinal() - 1  + values.length) % values.length]; }
+        */
+
+        public Directions next() {
+            return values[(ordinal() + 1) % values.length];
+        }
+    }
+
+    public Map<String, String> formattedDirections = new HashMap<>();
 
     private RemoteEndpoint.Async remote;
     private volatile boolean running = false;
-    double speed = 1;
-    int direction = 1;
+    double speed = 0.5;
+    private int L_Rdirection = 1;
+    Directions direction = Directions.L2R;
     int activeLed = -1;
+    Random r = new Random();
 
     public ThreadChenillard(RemoteEndpoint.Async remote){
         this.remote = remote;
     }
 
-    public void changeThreadState() {
-        LOG.info("Changing chaser state to "+this.running);
-        this.running = !(this.running);
+    public void changeThreadState(boolean running) {
+        this.running = running;
+        LOG.info("Changed chaser state to "+this.running);
+        ServerCommand toSend = new ServerCommand("status", this.running);
+        remote.sendText(gson.toJson(toSend));
+        toSend = (this.running) ? new ServerCommand("speed", this.speed) : new ServerCommand("speed", 0);
+        remote.sendText(gson.toJson(toSend));
+        toSend = new ServerCommand("direction", direction.label);
+        remote.sendText(gson.toJson(toSend));
     }
 
     public void changeChaserSpeed(double speed){
         this.speed = speed;
-        LOG.info("Changing chaser speed to "+this.speed);
+        LOG.info("Changed chaser speed to "+this.speed);
+        ServerCommand toSend = new ServerCommand("speed", this.speed);
+        remote.sendText(gson.toJson(toSend));
     }
 
     public void changeChaserDirection(){
-        if(this.direction == 1){
-            this.direction = -1;
-        }else{
-            this.direction = 1;
-        }
-        LOG.info("Changing chaser direction to "+this.direction);
+        this.direction = direction.next();
+        LOG.info("Changed chaser direction to "+this.direction);
+        LOG.info(String.valueOf(direction));
+        ServerCommand toSend = new ServerCommand("direction", direction.label);
+        remote.sendText(gson.toJson(toSend));
     }
 
     @Override
     public void run() {
         while(true) {
             while (running) {
-                if(activeLed == -1){ // Cas particulier : initialisation
+                if(activeLed == -1){ // Cas particulier : initialisation (nécessaire sinon le chenillard risque de commencer sur une mauvaise led
                     activeLed = 0;
-                }else{
+                }else{ // Détermination de la LED à allumer
                     // TODO : KNX - Eteindre la led d'indice activeLed
-                    activeLed += this.direction;
-                    if(activeLed < 0) activeLed = 3;
-                    if(activeLed > 3) activeLed = 0;
+                    switch(this.direction){
+                        case L2R:
+                            activeLed = (activeLed == 3) ? 0 : activeLed+1;
+                            break;
+
+                        case R2L:
+                            activeLed = (activeLed == 0) ? 3 : activeLed-1;
+                            break;
+
+                        case L_R:
+                            if(activeLed == 3){
+                                L_Rdirection = -1;
+                            }else if(activeLed == 0){
+                                L_Rdirection = 1;
+                            }
+                            activeLed += L_Rdirection;
+                            break;
+
+                        case RANDOM:
+                            int val = r.nextInt(4);
+                            while(activeLed == val){
+                                val = r.nextInt(4);
+                            }
+                            activeLed = val;
+                            break;
+                    }
                 }
 
                 // TODO : KNX - Allumer la led d'indice activeLed
-                Boolean[] LEDs = new Boolean[4];
+                boolean[] LEDs = new boolean[4];
                 Arrays.fill(LEDs, Boolean.FALSE);
                 LEDs[activeLed] = true;
-                Gson gson = builder.create();
-                String toSend = gson.toJson(LEDs);
-                remote.sendText(String.valueOf(toSend));
+                ServerCommand toSend = new ServerCommand("LEDStatus", LEDs);
+                remote.sendText(gson.toJson(toSend));
                 try {
                     Thread.sleep((long) (250*(1/speed)));
                 } catch (InterruptedException ex) {
