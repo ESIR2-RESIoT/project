@@ -19,6 +19,14 @@ function getKeyCode(ev) {
     return ev.keyCode;
 }
 
+function httpPost(route, body){
+        var url = "http://localhost:8080/"+route
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(body);
+    }
+
 var wstool = {
 
     // Ouverture de websocket client
@@ -61,16 +69,6 @@ var wstool = {
     log: function(type, message){
         console.log("["+type+"] "+message)
     },
-
-    _test : function(){
-        var url = "http://localhost:8080/"
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({
-        value: JSON.stringify(data)
-        }));
-    }
 
     // A l'ouverture du websocket
     _onopen : function() {

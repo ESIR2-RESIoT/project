@@ -62,7 +62,6 @@ public class ChenillardThread extends Thread {
             try {
                 Thread.sleep(timer);
             } catch (InterruptedException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
             while (!pause) {
@@ -70,7 +69,6 @@ public class ChenillardThread extends Thread {
                     try {
                         Thread.sleep(timer);
                     } catch (InterruptedException e1) {
-                        // TODO Auto-generated catch block
                         e1.printStackTrace();
                     }
                 }
