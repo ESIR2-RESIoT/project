@@ -84,7 +84,7 @@ public class ThreadChenillard extends Thread {
     @Override
     public void run() {
         while(true) {
-            LOG.info(String.valueOf(running));
+            LOG.info(String.valueOf(running)); // Ne pas supprimer ce log sinon tout casse
             while (running) {
                 //LOG.info("true");
                 if(activeLed == -1){ // Cas particulier : initialisation (nécessaire sinon le chenillard risque de commencer sur une mauvaise led
