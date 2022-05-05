@@ -17,7 +17,13 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     private static final Logger LOG = Log.getLogger(Websocket.class);
     private Session session;
     private RemoteEndpoint.Async remote;
-    private KNXHandler knxHandler;
+    // private KNXHandler knxHandler; // Deprecated
+
+    private static ThreadChenillard thread;
+
+    public static void setChaserThread(ThreadChenillard newThread){
+        thread = newThread;
+    }
 
     @Override
     public void onClose(Session session, CloseReason close)
@@ -26,13 +32,14 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         this.session = null;
         this.remote = null;
         LOG.info("WebSocket Close: {} - {}",close.getCloseCode(),close.getReasonPhrase());
+        thread.changeThreadState(false);
     }
 
     public void onOpen(Session session, EndpointConfig config)
     {
         this.session = session;
         this.remote = this.session.getAsyncRemote();
-        knxHandler = new KNXHandler(this.remote);
+        //knxHandler = new KNXHandler(this.remote); // Deprecated
         LOG.info("WebSocket Connect: {}",session);
         ServerCommand toSend = new ServerCommand("info", "You are now connected to " + this.getClass().getName());
         GsonBuilder builder = new GsonBuilder();
@@ -40,6 +47,8 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         this.remote.sendText(gson.toJson(toSend));
         // attach echo message handler
         session.addMessageHandler(this);
+        thread.setRemote(this.remote);
+        thread.changeThreadState(false);
     }
 
     @Override
@@ -54,7 +63,7 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     {
         if (this.session != null && this.session.isOpen() && this.remote != null)
         {
-            knxHandler.processRequest(message);
+            // knxHandler.processRequest(message); // Deprecated
         }
     }
 }

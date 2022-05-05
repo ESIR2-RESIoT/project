@@ -7,28 +7,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script type="text/javascript" src="websocket.js"></script>
+    <style>
+        .img {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+
+        }
+        </style>
 </head>
 <body>
 <div class="container body-content">
     <div class="container">
-        <input type="button" id="test" class="btn btn-success btn-lg btn-block"
-               value="test" onclick="" disabled="disabled">
         <div class="row justify-content-center" style="padding-top:10px;">
             <h1>Projet RESIoT</h1>
         </div>
-        <div class="row justify-content-start" style="padding-top:100px;">
-            <p>L'objectif du projet est, à partir de la page web, commander le KNX qui lance ou arrète un chenillard de
-                DEL</p>
-            <p>Plusieurs étapes permettent de mener à bien le projet :</p>
-            <ul>
-                <li>1. Choix des langages de programmation</li>
-                <li>2. Création d'un serveur web</li>
-                <li>3. Création d'une page web pour commander le KNX</li>
-                <li>4. Mettre en place la partie asynchrone</li>
-            </ul>
-        </div>
-        <div class="row justify-content-start" style="padding-top:100px;">
-            <div class="d-grid gap-2">
+        <div class="row justify-content-start" style="padding-top:50px;">
+            <div class="d-grid gap-2" style="padding-bottom:15px;">
                 <input type="button" class="btn btn-secondary btn-lg" id="connect" value="Connexion" onclick="">
                 <input type="button" class="btn btn-secondary btn-lg" id="disconnect" value="Déconnexion" onclick=""
                        disabled="disabled">
@@ -39,10 +35,12 @@
                    value="Arrêter le chenillard" onclick="" disabled="disabled">
             <input type="button" id="sensChenillard" class="btn btn-dark btn-lg btn-block"
                    value="Changer le sens du chenillard" onclick="" disabled="disabled">
-            <div class="container">
+            <div class="container" style="padding-top:10px;">
                 <div class="row">
                     <div class="col-8">
-                        <p>Changer la vitesse du chenillard :</p>
+                        <div class="alert alert-danger">
+                            Changer la vitesse du chenillard :
+                          </div>
                         <input type="button" id="speed25" class="btn btn-secondary btn-lg" aria-pressed="true" value="25%"
                                onclick="" disabled="disabled">
                         <input type="button" id="speed50" class="btn btn-info btn-lg" aria-pressed="true" value="50%" onclick=""
@@ -62,8 +60,13 @@
 
 
         </div>
-        <div>
-            <p>Affichage en temps réel des LED</p>
+        <div style="padding-top:15px;">
+            <div class="alert alert-success">
+                Affichage en temps réel des LED :
+            </div>
+        </div>
+
+        <div class = "img">
             <img id="led0" src="images/led_red.png">
             <img id="led1" src="images/led_red.png">
             <img id="led2" src="images/led_red.png">
@@ -71,6 +74,19 @@
         </div>
         <div class="row justify-content-start" style="padding-top:10px;">
             <div class="col" style="padding-top:250px;">
+                <h2>Objectif</h2>
+                <div class="row justify-content-start" style="padding-top:100px;">
+                    <p>L'objectif du projet est, à partir de la page web, commander le KNX qui lance ou arrète un chenillard de
+                        DEL</p>
+                    <p>Plusieurs étapes permettent de mener à bien le projet :</p>
+                    <ul>
+                        <li>1. Choix des langages de programmation</li>
+                        <li>2. Création d'un serveur web</li>
+                        <li>3. Création d'une page web pour commander le KNX</li>
+                        <li>4. Mettre en place la partie asynchrone</li>
+                    </ul>
+                </div>
+
                 <h2>Architecture</h2>
                 <img src="images/architecture.png" alt="Architecture" width="auto" height="850">
             </div>
@@ -82,16 +98,15 @@
     </div>
 </div>
 <script type="text/javascript">
-    $("test").onclick = function(event) { wstool._test() }
     $("connect").onclick = function(event) { wstool.connect() }
     $("disconnect").onclick = function(event) { wstool.close() }
-    $("startChenillard").onclick = function(event) { wstool._send("changeState","true")  }
-    $("stopChenillard").onclick = function(event) { wstool._send("changeState","false") }
-    $("sensChenillard").onclick = function(event) { wstool._send("changeDirection","") }
-    $("speed25").onclick = function(event) { wstool._send("changeSpeed","0.25") }
-    $("speed50").onclick = function(event) { wstool._send("changeSpeed","0.5") }
-    $("speed75").onclick = function(event) { wstool._send("changeSpeed","0.75") }
-    $("speed100").onclick = function(event) { wstool._send("changeSpeed","1") }
+    $("startChenillard").onclick = function(event) { httpPost("state","true")  }
+    $("stopChenillard").onclick = function(event) { httpPost("state","false") }
+    $("sensChenillard").onclick = function(event) { httpPost("direction","") }
+    $("speed25").onclick = function(event) { httpPost("speed","0.25") }
+    $("speed50").onclick = function(event) { httpPost("speed","0.5") }
+    $("speed75").onclick = function(event) { httpPost("speed","0.75") }
+    $("speed100").onclick = function(event) { httpPost("speed","1") }
 
 
 </script>

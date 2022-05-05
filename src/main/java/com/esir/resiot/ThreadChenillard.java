@@ -10,10 +10,9 @@ import org.eclipse.jetty.util.log.Logger;
 import java.util.*;
 
 public class ThreadChenillard extends Thread {
-    private static final Logger LOG = Log.getLogger(Websocket.class);
-    private static final GsonBuilder builder = new GsonBuilder();
-    private static final Gson gson = builder.create();
-
+    private final Logger LOG = Log.getLogger(ThreadChenillard.class);
+    private final GsonBuilder builder = new GsonBuilder();
+    private final Gson gson = builder.create();
 
     public enum Directions{
         L2R("Gauche -> Droite"),
@@ -36,22 +35,28 @@ public class ThreadChenillard extends Thread {
         }
     }
 
-    public Map<String, String> formattedDirections = new HashMap<>();
-
-    private RemoteEndpoint.Async remote;
-    private volatile boolean running = false;
+    /*
+    remote is the client connected to the server via websocket.
+    It is null until a websocket connection is created.
+     */
+    public RemoteEndpoint.Async remote;
+    boolean running = false;
     double speed = 0.5;
     private int L_Rdirection = 1;
     Directions direction = Directions.L2R;
     int activeLed = -1;
     Random r = new Random();
 
-    public ThreadChenillard(RemoteEndpoint.Async remote){
+    public ThreadChenillard(){
+
+    }
+
+    public void setRemote(RemoteEndpoint.Async remote){
         this.remote = remote;
     }
 
-    public void changeThreadState(boolean running) {
-        this.running = running;
+    public void changeThreadState(boolean val) {
+        this.running = val;
         LOG.info("Changed chaser state to "+this.running);
         ServerCommand toSend = new ServerCommand("status", this.running);
         remote.sendText(gson.toJson(toSend));
@@ -79,7 +84,9 @@ public class ThreadChenillard extends Thread {
     @Override
     public void run() {
         while(true) {
+            LOG.info(String.valueOf(running)); // Ne pas supprimer ce log sinon tout casse
             while (running) {
+                //LOG.info("true");
                 if(activeLed == -1){ // Cas particulier : initialisation (nécessaire sinon le chenillard risque de commencer sur une mauvaise led
                     activeLed = 0;
                 }else{ // Détermination de la LED à allumer
