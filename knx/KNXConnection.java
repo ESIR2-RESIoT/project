@@ -1,17 +1,26 @@
 import java.net.InetSocketAddress;
-
+import tuwien.auto.calimero.GroupAddress;
+import tuwien.auto.calimero.KNXException;
+import tuwien.auto.calimero.link.KNXNetworkLink;
+import tuwien.auto.calimero.link.KNXNetworkLinkIP;
+import tuwien.auto.calimero.link.medium.TPSettings;
+import tuwien.auto.calimero.process.ProcessCommunicator;
+import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
 
 public class KNXConnection {
 
     private KNXNetworkLink knxLink;
     private ProcessCommunicator pc;
     private ChenillardThread chenillardThread;
+    private static final InetSocketAddress local = new InetSocketAddress(0);
+
 
     public KNXConnection(String ip, ChenillardThread chenillardThread) {
         InetSocketAddress socket = new InetSocketAddress(ip, 3671);
         try {
             chenillardThread = new ChenillardThread(this);
             this.knxLink = KNXNetworkLinkIP.newTunnelingLink(null, socket, false, new TPSettings());
+            System.out.println("Connection established to server");
             this.chenillardThread = chenillardThread;
             this.chenillardThread.start();
             this.pc = new ProcessCommunicatorImpl(knxLink) {
