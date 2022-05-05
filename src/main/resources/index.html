@@ -7,6 +7,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <script type="text/javascript" src="websocket.js"></script>
+    <style>
+        .img {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+
+        }
+        </style>
 </head>
 <body>
 <div class="container body-content">
@@ -40,8 +49,10 @@
                    value="Changer le sens du chenillard" onclick="" disabled="disabled">
             <div class="container">
                 <div class="row">
-                    <div class="col-8">
-                        <p>Changer la vitesse du chenillard :</p>
+                    <div class="col-8" style="padding-top:15px;">
+                        <div class="alert alert-danger">
+                            Changer la vitesse du chenillard :
+                          </div>
                         <input type="button" id="speed25" class="btn btn-secondary btn-lg" aria-pressed="true" value="25%"
                                onclick="" disabled="disabled">
                         <input type="button" id="speed50" class="btn btn-info btn-lg" aria-pressed="true" value="50%" onclick=""
@@ -61,8 +72,13 @@
 
 
         </div>
-        <div>
-            <p>Affichage en temps réel des LED</p>
+        <div style="padding-top:15px;">
+            <div class="alert alert-success">
+                Affichage en temps réel des LED :
+            </div>
+        </div>
+
+        <div class = "img">
             <img id="led0" src="images/led_red.png">
             <img id="led1" src="images/led_red.png">
             <img id="led2" src="images/led_red.png">
