@@ -22,11 +22,11 @@ import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainer
 
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
+import tuwien.auto.calimero.KNXException;
 
 public class Main
 {
-    public static void main(String[] args) throws ServletException, DeploymentException
-    {
+    public static void main(String[] args) throws ServletException, DeploymentException, KNXException, InterruptedException {
         Server server = new Server(8080);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);

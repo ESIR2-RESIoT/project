@@ -6,7 +6,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
+import tuwien.auto.calimero.KNXException;
+import tuwien.auto.calimero.link.KNXNetworkLink;
+import tuwien.auto.calimero.link.KNXNetworkLinkIP;
+import tuwien.auto.calimero.link.medium.TPSettings;
 
+import java.net.InetSocketAddress;
 import java.util.*;
 
 public class ThreadChenillard extends Thread {
@@ -39,23 +44,41 @@ public class ThreadChenillard extends Thread {
     remote is the client connected to the server via websocket.
     It is null until a websocket connection is created.
      */
-    public RemoteEndpoint.Async remote;
+
     boolean running = false;
     double speed = 0.5;
     private int L_Rdirection = 1;
     Directions direction = Directions.L2R;
     int activeLed = -1;
+    int previousLed = -1;
     Random r = new Random();
+    private RemoteEndpoint.Async remote;
+    private ProcessCommunication processCommunication;
+    private KNXNetworkLink knxLink;
 
-    public ThreadChenillard(){
-
+    public ThreadChenillard() throws KNXException, InterruptedException {
+        processCommunication = new ProcessCommunication();
     }
 
     public void setRemote(RemoteEndpoint.Async remote){
         this.remote = remote;
     }
 
-    public void changeThreadState(boolean val) {
+    public void setProcessCommunication(ProcessCommunication pc){
+        this.processCommunication = pc;
+    }
+    public ProcessCommunication getProcessCommunication(){
+        return processCommunication;
+    }
+    public KNXNetworkLink getKnxLink(){
+        return knxLink;
+    }
+
+
+    public void changeThreadState(boolean val) throws InterruptedException {
+        //processCommunication.ecrireKNXdata("0/0/2", val); // Test KNX
+        Thread.sleep(250);
+
         this.running = val;
         LOG.info("Changed chaser state to "+this.running);
         ServerCommand toSend = new ServerCommand("status", this.running);
@@ -84,13 +107,13 @@ public class ThreadChenillard extends Thread {
     @Override
     public void run() {
         while(true) {
-            LOG.info(String.valueOf(running)); // Ne pas supprimer ce log sinon tout casse
+            LOG.info(String.valueOf(running)); // Ne pas supprimer ce log sinon tout casse (on sait pas pourquoi non plus)
             while (running) {
                 //LOG.info("true");
                 if(activeLed == -1){ // Cas particulier : initialisation (nécessaire sinon le chenillard risque de commencer sur une mauvaise led
                     activeLed = 0;
                 }else{ // Détermination de la LED à allumer
-
+                    previousLed = activeLed;
                     // TODO : KNX - Eteindre la led d'indice activeLed
 
                     switch(this.direction){
@@ -128,6 +151,17 @@ public class ThreadChenillard extends Thread {
                 LEDs[activeLed] = true;
                 ServerCommand toSend = new ServerCommand("LEDStatus", LEDs);
                 remote.sendText(gson.toJson(toSend));
+                try{
+                    System.out.println(1);
+                    processCommunication.ecrireKNXdata("0/0/"+previousLed+1, false);
+                    System.out.println(2);
+                    processCommunication.ecrireKNXdata("0/0/"+activeLed+1, true);
+                    System.out.println(3);
+                }catch(Exception e){
+                    System.out.println("Error: " + e.getMessage());
+                }
+
+
                 try {
                     Thread.sleep((long) (250*(1/speed)));
                 } catch (InterruptedException ex) {

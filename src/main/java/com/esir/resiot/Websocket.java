@@ -32,7 +32,13 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         this.session = null;
         this.remote = null;
         LOG.info("WebSocket Close: {} - {}",close.getCloseCode(),close.getReasonPhrase());
-        thread.changeThreadState(false);
+        try {
+            thread.changeThreadState(false);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        thread.getProcessCommunication().getPc().close();
+        thread.getKnxLink().close();
     }
 
     public void onOpen(Session session, EndpointConfig config)
@@ -48,7 +54,11 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         // attach echo message handler
         session.addMessageHandler(this);
         thread.setRemote(this.remote);
-        thread.changeThreadState(false);
+        try {
+            thread.changeThreadState(false);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

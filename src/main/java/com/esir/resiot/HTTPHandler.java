@@ -22,6 +22,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.log.Logger;
+import tuwien.auto.calimero.KNXException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +33,7 @@ public class HTTPHandler extends AbstractHandler
     private static final Logger LOG = Log.getLogger(HTTPHandler.class);
     private final ThreadChenillard thread;
 
-    public HTTPHandler(){
+    public HTTPHandler() throws KNXException, InterruptedException {
         thread = new ThreadChenillard();
         thread.start();
         Websocket.setChaserThread(thread);
@@ -57,7 +58,11 @@ public class HTTPHandler extends AbstractHandler
             // Routage
             switch(baseRequest.getRequestURI()){
                 case "/state":
-                    thread.changeThreadState(Boolean.parseBoolean(body));
+                    try {
+                        thread.changeThreadState(Boolean.parseBoolean(body));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     break;
 
                 case "/direction":
