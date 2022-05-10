@@ -18,8 +18,6 @@ package com.esir.resiot;
 
 import java.net.InetSocketAddress;
 
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
 import tuwien.auto.calimero.GroupAddress;
 import tuwien.auto.calimero.KNXException;
 import tuwien.auto.calimero.link.KNXNetworkLink;
@@ -34,15 +32,12 @@ import tuwien.auto.calimero.process.ProcessCommunicatorImpl;
  */
 public class ProcessCommunication
 {
-    private final Logger LOG = Log.getLogger(ProcessCommunication.class);
 
     // Address of your KNXnet/IP server. Replace the IP host or address as necessary.
     private static final String remoteHost = "192.168.0.201";
 
     // We will read a boolean from the KNX datapoint with this group address, replace the address as necessary.
     // Make sure this datapoint exists, otherwise you will get a read timeout!
-    private static final String ecritureLampe1 = "0/0/3";
-    private static final String lectureLampe1 = "0/1/1";
     private static ProcessCommunicator pc;
     private static KNXNetworkLink knxLink;
 
@@ -52,6 +47,7 @@ public class ProcessCommunication
         try{
             knxLink = KNXNetworkLinkIP.newTunnelingLink(null, remote, false, new TPSettings());
             pc = new ProcessCommunicatorImpl(knxLink);
+
             //System.out.println("read boolean value from datapoint " + lectureLampe1);
             //final boolean value = pc.readBool(new GroupAddress(lectureLampe1));
             //System.out.println("datapoint " + lectureLampe1 + " value = " + value);

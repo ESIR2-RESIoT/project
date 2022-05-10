@@ -3,8 +3,6 @@ package deprecated;
 import com.esir.resiot.ClientCommand;
 import com.esir.resiot.ThreadChenillard;
 import com.esir.resiot.Websocket;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
 
 import javax.websocket.RemoteEndpoint;
 import com.google.gson.Gson;
@@ -13,7 +11,6 @@ import com.google.gson.GsonBuilder;
 @Deprecated
 public class KNXHandler {
 
-    private static final Logger LOG = Log.getLogger(Websocket.class);
     private static final GsonBuilder builder = new GsonBuilder();
 
     //private final ThreadChenillard thread;
@@ -31,10 +28,10 @@ public class KNXHandler {
         switch(clientCommand.getCommand()){
             case "changeState":
                 if(Boolean.parseBoolean(clientCommand.getArg())){
-                    LOG.info("Starting chaser");
+                    System.out.println("Starting chaser");
                     //thread.changeThreadState(true);
                 }else{
-                    LOG.info("Stopping chaser");
+                    System.out.println("Stopping chaser");
                     //thread.changeThreadState(false);
                 }
 

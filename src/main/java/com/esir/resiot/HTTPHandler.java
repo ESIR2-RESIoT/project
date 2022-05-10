@@ -20,8 +20,6 @@ import java.io.Reader;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
 import tuwien.auto.calimero.KNXException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,22 +28,22 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HTTPHandler extends AbstractHandler
 {
-    private static final Logger LOG = Log.getLogger(HTTPHandler.class);
     private final ThreadChenillard thread;
 
     public HTTPHandler() throws KNXException, InterruptedException {
         thread = new ThreadChenillard();
         thread.start();
         Websocket.setChaserThread(thread);
+
     }
 
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        LOG.info("requete recue");
+        System.out.println("requete recue");
         baseRequest.setHandled(true);
 
         if(baseRequest.getMethod().equals("POST")){
-            LOG.info("POST recu sur "+baseRequest.getRequestURI());
+            System.out.println("POST recu sur "+baseRequest.getRequestURI());
             BufferedReader in = new BufferedReader(new InputStreamReader(baseRequest.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String line;
@@ -53,7 +51,7 @@ public class HTTPHandler extends AbstractHandler
                 sb.append(line);
             }
             String body = String.valueOf(sb);
-            LOG.info("Corps de la requete: "+ body);
+            System.out.println("Corps de la requete: "+ body);
 
             // Routage
             switch(baseRequest.getRequestURI()){

@@ -20,12 +20,18 @@ function getKeyCode(ev) {
 }
 
 function httpPost(route, body){
-        var url = "http://localhost:8080/"+route
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(body);
-    }
+        try{
+            var url = "http://localhost:8080/"+route;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(body);
+            }catch(e){
+                console.log(e)
+            }
+        }
+
+
 
 var wstool = {
 
