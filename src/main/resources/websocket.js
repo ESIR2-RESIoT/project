@@ -45,6 +45,7 @@ var wstool = {
             this._ws.onmessage = this._onmessage;
             this._ws.onclose = this._onclose;
             this._ws.url = "ws://localhost:8080/"
+            this.setState(true)
         } catch (exception) {
             wstool.log("error", "Connect Error: " + exception);
         }
@@ -53,6 +54,7 @@ var wstool = {
     // Fermeture du websocket
     close : function() {
         this._ws.close(1000);
+        this.setState(false)
     },
 
     // Accessibilité des boutons selon l'état de la connexion
@@ -60,13 +62,9 @@ var wstool = {
         $('connect').disabled = enabled;
         $('disconnect').disabled = !enabled;
         $('startChenillard').disabled = !enabled;
-        $('stopChenillard').disabled = !enabled;
         $('sensChenillard').disabled = !enabled;
-        $('speed25').disabled = !enabled;
-        $('speed50').disabled = !enabled;
-        $('speed75').disabled = !enabled;
-        $('speed100').disabled = !enabled;
-
+        $('increaseSpeed').disabled = !enabled;
+        $('decreaseSpeed').disabled = !enabled;
     },
 
     // Debug côté client
@@ -109,15 +107,15 @@ var wstool = {
 
                 case "status":
                     let status = response.args ? "Marche" : "Arrêt"
-                    $("statusLabel").innerHTML = "Etat : <strong>"+status+"</strong>"
+                    $("startChenillard").value = "Etat : "+status
                     break;
 
                 case "direction":
-                    $("directionLabel").innerHTML = "Direction : <strong>"+response.args+"</strong>"
+                    $("sensChenillard").value = "Mode : "+response.args
                     break;
 
                 case "speed":
-                    $("speedLabel").innerHTML = "Vitesse : <strong>"+(100*response.args)+"%</strong>"
+                    $("speedLabel").value = "Vitesse : "+ (100*response.args)+"%"
 
                     break;
             }
