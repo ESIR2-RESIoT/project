@@ -39,7 +39,7 @@
                     <div class="col-8 alert alert-primary">
                         <input type="button" id="decreaseSpeed" class="btn btn-dark btn-lg btn-block"
                                 value="Diminuer" onclick="" disabled="disabled">
-                        <input id="speedLabel" class="btn btn-secondary btn-lg" value="Vitesse : 50%" disabled="disabled">
+                        <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%" disabled="disabled">
                         <input type="button" id="increaseSpeed" class="btn btn-dark btn-lg btn-block"
                                 value="Augmenter" onclick="" disabled="disabled">
                     </div>
@@ -117,7 +117,6 @@
         }
         httpPost("speed",JSON.stringify(speed))
     };
-
     $("sensChenillard").onclick = function(event) { httpPost("direction","") }
 </script>
 </body>
