@@ -17,7 +17,7 @@ public class ThreadChenillard extends Thread {
     private final GsonBuilder builder = new GsonBuilder();
     private final Gson gson = builder.create();
 
-    public enum Directions{
+    public enum Directions {
         L2R("Gauche -> Droite"),
         R2L("Droite -> Gauche"),
         L_R("Gauche <-> Droite"),
@@ -47,27 +47,30 @@ public class ThreadChenillard extends Thread {
     double speed = 0.5;
     private int L_Rdirection = 1;
     Directions direction = Directions.L2R;
-    int activeLed = -1;
-    int previousLed = -1;
+    List<Integer> activeLeds = new ArrayList<Integer>();
+    List<Integer> previousLeds = new ArrayList<Integer>();
+    List<Integer> ledsOff = new ArrayList<Integer>();
+    List<Integer> ledsOn = new ArrayList<Integer>();
     Random r = new Random();
     private RemoteEndpoint.Async remote;
     private ProcessCommunication processCommunication;
 
     public ThreadChenillard() throws KNXException, InterruptedException {
         processCommunication = new ProcessCommunication();
+        activeLeds.add(0);
     }
 
-    public void setRemote(RemoteEndpoint.Async remote){
+    public void setRemote(RemoteEndpoint.Async remote) {
         this.remote = remote;
     }
 
-    public void setProcessCommunication(ProcessCommunication pc){
+    public void setProcessCommunication(ProcessCommunication pc) {
         this.processCommunication = pc;
     }
-    public ProcessCommunication getProcessCommunication(){
+
+    public ProcessCommunication getProcessCommunication() {
         return processCommunication;
     }
-
 
 
     public void changeThreadState(boolean val) throws InterruptedException {
@@ -75,7 +78,7 @@ public class ThreadChenillard extends Thread {
         Thread.sleep(250);
 
         this.running = val;
-        System.out.println("Changed chaser state to "+this.running);
+        System.out.println("Changed chaser state to " + this.running);
         ServerCommand toSend = new ServerCommand("status", this.running);
         remote.sendText(gson.toJson(toSend));
         toSend = (this.running) ? new ServerCommand("speed", this.speed) : new ServerCommand("speed", 0);
@@ -84,72 +87,81 @@ public class ThreadChenillard extends Thread {
         remote.sendText(gson.toJson(toSend));
     }
 
-    public void changeChaserSpeed(double speed){
+    public void changeChaserSpeed(double speed) {
         this.speed = speed;
-        System.out.println("Changed chaser speed to "+this.speed);
+        System.out.println("Changed chaser speed to " + this.speed);
         ServerCommand toSend = new ServerCommand("speed", this.speed);
         remote.sendText(gson.toJson(toSend));
     }
 
-    public void changeChaserDirection(){
+    public void changeChaserDirection() {
         this.direction = direction.next();
-        System.out.println("Changed chaser direction to "+this.direction);
-        System.out.println(String.valueOf(direction));
+        System.out.println("Changed chaser direction to " + this.direction);
+        System.out.println(direction);
         ServerCommand toSend = new ServerCommand("direction", direction.label);
         remote.sendText(gson.toJson(toSend));
     }
 
     @Override
     public void run() {
-        while(true) {
+        while (true) {
             while (running) {
-                if(activeLed == -1){ // Cas particulier : initialisation (nécessaire sinon le chenillard risque de commencer sur une mauvaise led
-                    activeLed = 0;
-                    previousLed = 0;
-                }else{ // Détermination de la LED à allumer
-                    previousLed = activeLed;
-                    // TODO : KNX - Eteindre la led d'indice activeLed
+                previousLeds.clear();
+                previousLeds.addAll(activeLeds);
+                activeLeds.clear();
+                ledsOff.clear();
+                ledsOn.clear();
+                switch (this.direction) {
+                    case L2R:
+                        activeLeds.add((previousLeds.get(0) == 3) ? 0 : previousLeds.get(0) + 1);
+                        break;
 
-                    switch(this.direction){
-                        case L2R:
-                            activeLed = (activeLed == 3) ? 0 : activeLed+1;
-                            break;
+                    case R2L:
+                        activeLeds.add((previousLeds.get(0) == 0) ? 3 : previousLeds.get(0) - 1);
+                        break;
 
-                        case R2L:
-                            activeLed = (activeLed == 0) ? 3 : activeLed-1;
-                            break;
+                    case L_R:
+                        if (previousLeds.get(0) == 3) {
+                            L_Rdirection = -1;
+                        } else if (previousLeds.get(0) == 0) {
+                            L_Rdirection = 1;
+                        }
+                        activeLeds.add(previousLeds.get(0) + L_Rdirection);
+                        break;
 
-                        case L_R:
-                            if(activeLed == 3){
-                                L_Rdirection = -1;
-                            }else if(activeLed == 0){
-                                L_Rdirection = 1;
-                            }
-                            activeLed += L_Rdirection;
-                            break;
-
-                        case RANDOM:
-                            int val = r.nextInt(4);
-                            while(activeLed == val){
-                                val = r.nextInt(4);
-                            }
-                            activeLed = val;
-                            break;
-                    }
+                    case RANDOM:
+                        int val = r.nextInt(4);
+                        while (previousLeds.get(0) == val) {
+                            val = r.nextInt(4);
+                        }
+                        activeLeds.add(val);
+                        break;
                 }
+
                 boolean[] LEDs = new boolean[4];
                 Arrays.fill(LEDs, Boolean.FALSE);
-                LEDs[activeLed] = true;
+                for (int led : activeLeds) {
+                    LEDs[led] = true;
+                }
                 ServerCommand toSend = new ServerCommand("LEDStatus", LEDs);
                 remote.sendText(gson.toJson(toSend));
 
-                processCommunication.ecrireKNXdata("0/0/"+(previousLed + 1), false);
-                System.out.println("[KNX] LED 0/0/"+(previousLed + 1)+" eteinte");
-                processCommunication.ecrireKNXdata("0/0/"+ (activeLed + 1), true);
-                System.out.println("[KNX] LED 0/0/"+(activeLed + 1)+" allumee\n");
+                for (int led : previousLeds) {
+                    if (!(activeLeds.contains(led))) {
+                        ledsOff.add(led);
+                    }
+                }
+                for (int led : activeLeds) {
+                    if (!(previousLeds.contains(led))) {
+                        ledsOn.add(led);
+                    }
+                }
+
+                for (int led : ledsOff) processCommunication.ecrireKNXdata("0/0/" + (led + 1), false);
+                for (int led : ledsOn) processCommunication.ecrireKNXdata("0/0/" + (led + 1), true);
 
                 try {
-                    Thread.sleep((long) (250*(1/speed)));
+                    Thread.sleep((long) (250 * (1 / speed)));
                 } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
