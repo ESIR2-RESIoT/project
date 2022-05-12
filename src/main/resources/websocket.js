@@ -115,7 +115,7 @@ var wstool = {
                     break;
 
                 case "speed":
-                    $("speedLabel").value = "Vitesse : "+ (100*response.args)+"%"
+                    $("speedLabelButton").value = "Vitesse : "+ (100*response.args)+"%"
 
                     break;
             }
