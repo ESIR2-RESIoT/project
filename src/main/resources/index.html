@@ -42,8 +42,9 @@
                           </div>
                         <input type="button" id="increaseSpeed" class="btn btn-dark btn-lg btn-block"
                                 value="Augmenter" onclick="" disabled="disabled">
-                        <input type="text" id="speed" class="btn btn-secondary btn-lg" aria-pressed="true" value="valueSpeed"
+                        <input type="text" id="speedvalue" class="btn btn-secondary btn-lg" aria-pressed="true" value="speed_value"
                                 onclick="" disabled="disabled">
+                        <label for="speedvalue" id="speed_value"></label><br />
                         <input type="button" id="decreaseSpeed" class="btn btn-dark btn-lg btn-block"
                                 value="Diminuer" onclick="" disabled="disabled">
                     </div>
@@ -97,6 +98,7 @@
 <script type="text/javascript">
     var chaserState = false
     var speed = 0.5
+    document.getElementById('speed_value').innerHTML = speed
     $("connect").onclick = function(event) { wstool.connect() }
     $("disconnect").onclick = function(event) { wstool.close() }
     $("startChenillard").onclick = function(event) {
