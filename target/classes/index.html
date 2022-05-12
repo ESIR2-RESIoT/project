@@ -23,35 +23,25 @@
         </div>
         <div class="row justify-content-start" style="padding-top:50px;">
             <div class="d-grid gap-2" style="padding-bottom:15px;">
-                <input type="button" class="btn btn-secondary btn-lg" id="connect" value="Connexion" onclick="">
-                <input type="button" class="btn btn-secondary btn-lg" id="disconnect" value="Déconnexion" onclick=""
+                <input type="button" class="btn btn-success btn-lg" id="connect" value="Connexion" onclick="">
+                <input type="button" class="btn btn-danger btn-lg" id="disconnect" value="Déconnexion" onclick=""
                        disabled="disabled">
             </div>
             <input type="button" id="startChenillard" class="btn btn-success btn-lg btn-block"
-                   value="Lancer le chenillard" onclick="" disabled="disabled">
-            <input type="button" id="stopChenillard" class="btn btn-danger btn-lg btn-block"
-                   value="Arrêter le chenillard" onclick="" disabled="disabled">
-            <input type="button" id="sensChenillard" class="btn btn-dark btn-lg btn-block"
-                   value="Changer le sens du chenillard" onclick="" disabled="disabled">
+                value="Etat : Arrêt" onclick="" disabled="disabled">
+            <div style="padding-top:10px;">
+            </div>
+            <input type="button" id="sensChenillard" class="btn btn-warning btn-lg btn-block"
+                value="Mode : Gauche -> Droite" onclick="" disabled="disabled">
+
             <div class="container" style="padding-top:10px;">
                 <div class="row">
-                    <div class="col-8">
-                        <div class="alert alert-danger">
-                            Changer la vitesse du chenillard :
-                          </div>
-                        <input type="button" id="speed25" class="btn btn-secondary btn-lg" aria-pressed="true" value="25%"
-                               onclick="" disabled="disabled">
-                        <input type="button" id="speed50" class="btn btn-info btn-lg" aria-pressed="true" value="50%" onclick=""
-                               disabled="disabled">
-                        <input type="button" id="speed75" class="btn btn-primary btn-lg" aria-pressed="true" value="75%"
-                               onclick="" disabled="disabled">
-                        <input type="button" id="speed100" class="btn btn-warning btn-lg" aria-pressed="true" value="100%"
-                               onclick="" disabled="disabled">
-                    </div>
-                    <div class="col-4 alert alert-primary">
-                        <p id="statusLabel">Etat : <strong>Déconnecté</strong></p>
-                        <p id="speedLabel"></p>
-                        <p id="directionLabel"></p>
+                    <div class="col-8 alert alert-primary">
+                        <input type="button" id="decreaseSpeed" class="btn btn-dark btn-lg btn-block"
+                                value="Diminuer" onclick="" disabled="disabled">
+                        <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%" disabled="disabled">
+                        <input type="button" id="increaseSpeed" class="btn btn-dark btn-lg btn-block"
+                                value="Augmenter" onclick="" disabled="disabled">
                     </div>
                 </div>
             </div>
@@ -59,7 +49,7 @@
 
         </div>
         <div style="padding-top:15px;">
-            <div class="alert alert-success">
+            <div class="alert alert-primary">
                 Affichage en temps réel des LED :
             </div>
         </div>
@@ -96,17 +86,38 @@
     </div>
 </div>
 <script type="text/javascript">
+    var chaserState = false
+    var speed = 0.5
+
     $("connect").onclick = function(event) { wstool.connect() }
+
     $("disconnect").onclick = function(event) { wstool.close() }
-    $("startChenillard").onclick = function(event) { httpPost("state","true")  }
-    $("stopChenillard").onclick = function(event) { httpPost("state","false") }
+
+    $("startChenillard").onclick = function(event) {
+        chaserState = !chaserState
+        httpPost("state",JSON.stringify(chaserState))
+    };
+
+    $("increaseSpeed").onclick = function(event) {
+        speed += 0.25
+        if(speed == 1){
+            $("increaseSpeed").disabled = true
+        }else{
+            $("decreaseSpeed").disabled = false
+        }
+        httpPost("speed",JSON.stringify(speed))
+    };
+
+    $("decreaseSpeed").onclick = function(event) {
+        speed -= 0.25
+        if(speed == 0.25){
+            $("decreaseSpeed").disabled = true
+        }else{
+            $("increaseSpeed").disabled = false
+        }
+        httpPost("speed",JSON.stringify(speed))
+    };
     $("sensChenillard").onclick = function(event) { httpPost("direction","") }
-    $("speed25").onclick = function(event) { httpPost("speed","0.25") }
-    $("speed50").onclick = function(event) { httpPost("speed","0.5") }
-    $("speed75").onclick = function(event) { httpPost("speed","0.75") }
-    $("speed100").onclick = function(event) { httpPost("speed","1") }
-
-
 </script>
 </body>
 </html>

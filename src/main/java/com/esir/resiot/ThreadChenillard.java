@@ -56,7 +56,7 @@ public class ThreadChenillard extends Thread {
     private ProcessCommunication processCommunication;
 
     public ThreadChenillard() throws KNXException, InterruptedException {
-        processCommunication = new ProcessCommunication();
+        //processCommunication = new ProcessCommunication();
         activeLeds.add(0);
     }
 
@@ -81,7 +81,7 @@ public class ThreadChenillard extends Thread {
         System.out.println("Changed chaser state to " + this.running);
         ServerCommand toSend = new ServerCommand("status", this.running);
         remote.sendText(gson.toJson(toSend));
-        toSend = (this.running) ? new ServerCommand("speed", this.speed) : new ServerCommand("speed", 0);
+        toSend = new ServerCommand("speed", this.speed);
         remote.sendText(gson.toJson(toSend));
         toSend = new ServerCommand("direction", direction.label);
         remote.sendText(gson.toJson(toSend));
@@ -157,8 +157,8 @@ public class ThreadChenillard extends Thread {
                     }
                 }
 
-                for (int led : ledsOff) processCommunication.ecrireKNXdata("0/0/" + (led + 1), false);
-                for (int led : ledsOn) processCommunication.ecrireKNXdata("0/0/" + (led + 1), true);
+                //for (int led : ledsOff) processCommunication.ecrireKNXdata("0/0/" + (led + 1), false);
+                //for (int led : ledsOn) processCommunication.ecrireKNXdata("0/0/" + (led + 1), true);
 
                 try {
                     Thread.sleep((long) (250 * (1 / speed)));
