@@ -5,7 +5,7 @@ import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-public class MainActivity extends Activity {
+public class  MainActivity extends Activity {
 
     private WebView webView = null;
 
@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
         WebViewClientImpl webViewClient = new WebViewClientImpl(this);
         webView.setWebViewClient(webViewClient);
 
-        webView.loadUrl("https://www.journaldev.com");
+        webView.loadUrl("https://mathiscertenais.github.io/");
     }
 
 
