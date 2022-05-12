@@ -9,12 +9,9 @@ import javax.websocket.Session;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.eclipse.jetty.util.log.Log;
-import org.eclipse.jetty.util.log.Logger;
 
 public class Websocket extends Endpoint implements MessageHandler.Whole<String>
 {
-    private static final Logger LOG = Log.getLogger(Websocket.class);
     private Session session;
     private RemoteEndpoint.Async remote;
     // private KNXHandler knxHandler; // Deprecated
@@ -31,14 +28,14 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         super.onClose(session,close);
         this.session = null;
         this.remote = null;
-        LOG.info("WebSocket Close: {} - {}",close.getCloseCode(),close.getReasonPhrase());
+        System.out.println("WebSocket Close: "+ close.getCloseCode() + " ; "+close.getReasonPhrase());
         try {
             thread.changeThreadState(false);
+            thread.getProcessCommunication().getPc().close();
+            thread.getProcessCommunication().getKnxLink().close();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        thread.getProcessCommunication().getPc().close();
-        thread.getKnxLink().close();
     }
 
     public void onOpen(Session session, EndpointConfig config)
@@ -46,7 +43,7 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
         this.session = session;
         this.remote = this.session.getAsyncRemote();
         //knxHandler = new KNXHandler(this.remote); // Deprecated
-        LOG.info("WebSocket Connect: {}",session);
+        System.out.println("WebSocket Connect: "+session);
         ServerCommand toSend = new ServerCommand("info", "You are now connected to " + this.getClass().getName());
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -65,7 +62,7 @@ public class Websocket extends Endpoint implements MessageHandler.Whole<String>
     public void onError(Session session, Throwable cause)
     {
         super.onError(session,cause);
-        LOG.warn("WebSocket Error",cause);
+        System.out.println("WebSocket Error: "+cause);
     }
 
     @Override
