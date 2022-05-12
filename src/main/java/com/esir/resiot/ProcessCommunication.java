@@ -34,7 +34,7 @@ public class ProcessCommunication
 {
 
     // Address of your KNXnet/IP server. Replace the IP host or address as necessary.
-    private static final String remoteHost = "192.168.0.201";
+    private static final String remoteHost = "192.168.0.202";
 
     // We will read a boolean from the KNX datapoint with this group address, replace the address as necessary.
     // Make sure this datapoint exists, otherwise you will get a read timeout!

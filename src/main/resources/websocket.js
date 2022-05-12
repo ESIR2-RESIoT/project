@@ -31,8 +31,6 @@ function httpPost(route, body){
             }
         }
 
-
-
 var wstool = {
 
     // Ouverture de websocket client
