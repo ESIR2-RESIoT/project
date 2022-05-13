@@ -39,11 +39,9 @@ public class HTTPHandler extends AbstractHandler
 
     public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException
     {
-        System.out.println("requete recue");
         baseRequest.setHandled(true);
 
         if(baseRequest.getMethod().equals("POST")){
-            System.out.println("POST recu sur "+baseRequest.getRequestURI());
             BufferedReader in = new BufferedReader(new InputStreamReader(baseRequest.getInputStream()));
             StringBuilder sb = new StringBuilder();
             String line;
@@ -51,16 +49,11 @@ public class HTTPHandler extends AbstractHandler
                 sb.append(line);
             }
             String body = String.valueOf(sb);
-            System.out.println("Corps de la requete: "+ body);
 
             // Routage
             switch(baseRequest.getRequestURI()){
                 case "/state":
-                    try {
-                        thread.changeThreadState(Boolean.parseBoolean(body));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    thread.changeThreadState(Boolean.parseBoolean(body));
                     break;
 
                 case "/direction":

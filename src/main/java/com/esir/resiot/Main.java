@@ -57,6 +57,7 @@ public class Main
         {
             server.start();
             server.join();
+            System.out.println("Serveur démarré");
         }
         catch (Exception e)
         {

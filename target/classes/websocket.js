@@ -76,9 +76,6 @@ var wstool = {
     _onopen : function() {
         wstool.setState(true);
         wstool.log("info", "Websocket Connected");
-        $("statusLabel").innerHTML = "Etat : <strong>Arrêt</strong>"
-        $("speedLabel").innerHTML = "Vitesse : <strong>0%</strong>"
-        $("directionLabel").innerHTML = "Sens : <strong>-</strong>"
     },
 
     // Communication client -> serveur
@@ -105,6 +102,11 @@ var wstool = {
                     }
                     break;
 
+                case "singleLedStatus":
+                    let color = response.args[1] ? "images/led_green.png" : "images/led_red.png"
+                    $("led"+response.args[0]).setAttribute("src",color)
+                break;
+
                 case "status":
                     let status = response.args ? "Marche" : "Arrêt"
                     $("startChenillard").value = "Etat : "+status
@@ -115,8 +117,18 @@ var wstool = {
                     break;
 
                 case "speed":
-                    $("speedLabelButton").value = "Vitesse : "+ (100*response.args)+"%"
-
+                    let speed = response.args
+                    $("speedLabelButton").value = "Vitesse : "+ (100*speed)+"%"
+                    if(speed == 0.25){
+                        $("increaseSpeed").disabled = false;
+                        $("decreaseSpeed").disabled = true;
+                    }else if(speed == 1){
+                        $("increaseSpeed").disabled = true;
+                        $("decreaseSpeed").disabled = false;
+                    }else{
+                        $("increaseSpeed").disabled = false;
+                        $("decreaseSpeed").disabled = false;
+                    }
                     break;
             }
         }
@@ -146,10 +158,6 @@ var wstool = {
         var codeStr = codeMap[closeEvent.code];
         wstool.log("info", "Code = " + closeEvent.code + "  " + codeStr);
         wstool.log("info", "Reason = " + closeEvent.reason);
-        $("statusLabel").innerHTML = "Etat : <strong>Déconnecté</strong>"
-        $("speedLabel").innerHTML = ""
-        $("directionLabel").innerHTML = ""
-
-
+        $("startButton").value = "Etat : <strong>Arrêt</strong>"
     }
 };

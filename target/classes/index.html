@@ -87,10 +87,8 @@
 </div>
 <script type="text/javascript">
     var chaserState = false
-    var speed = 0.5
 
     $("connect").onclick = function(event) { wstool.connect() }
-
     $("disconnect").onclick = function(event) { wstool.close() }
 
     $("startChenillard").onclick = function(event) {
@@ -98,25 +96,8 @@
         httpPost("state",JSON.stringify(chaserState))
     };
 
-    $("increaseSpeed").onclick = function(event) {
-        speed += 0.25
-        if(speed == 1){
-            $("increaseSpeed").disabled = true
-        }else{
-            $("decreaseSpeed").disabled = false
-        }
-        httpPost("speed",JSON.stringify(speed))
-    };
-
-    $("decreaseSpeed").onclick = function(event) {
-        speed -= 0.25
-        if(speed == 0.25){
-            $("decreaseSpeed").disabled = true
-        }else{
-            $("increaseSpeed").disabled = false
-        }
-        httpPost("speed",JSON.stringify(speed))
-    };
+    $("increaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(1)) };
+    $("decreaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(-1))};
     $("sensChenillard").onclick = function(event) { httpPost("direction","") }
 </script>
 </body>

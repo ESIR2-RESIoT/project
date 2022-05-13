@@ -6,11 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import tuwien.auto.calimero.KNXException;
-import tuwien.auto.calimero.link.KNXNetworkLink;
-import tuwien.auto.calimero.link.KNXNetworkLinkIP;
-import tuwien.auto.calimero.link.medium.TPSettings;
-
-import java.net.InetSocketAddress;
 import java.util.*;
 
 public class ThreadChenillard extends Thread {
@@ -56,7 +51,7 @@ public class ThreadChenillard extends Thread {
     private ProcessCommunication processCommunication;
 
     public ThreadChenillard() throws KNXException, InterruptedException {
-        //processCommunication = new ProcessCommunication();
+        processCommunication = new ProcessCommunication(this);
         activeLeds.add(0);
     }
 
@@ -64,19 +59,17 @@ public class ThreadChenillard extends Thread {
         this.remote = remote;
     }
 
-    public void setProcessCommunication(ProcessCommunication pc) {
-        this.processCommunication = pc;
-    }
-
     public ProcessCommunication getProcessCommunication() {
         return processCommunication;
     }
 
 
-    public void changeThreadState(boolean val) throws InterruptedException {
-        //processCommunication.ecrireKNXdata("0/0/2", val); // Test KNX
-        Thread.sleep(250);
+    public void changeThreadState(){
+        this.running = !(this.running);
+        changeThreadState(this.running);
+    }
 
+    public void changeThreadState(boolean val){
         this.running = val;
         System.out.println("Changed chaser state to " + this.running);
         ServerCommand toSend = new ServerCommand("status", this.running);
@@ -88,7 +81,9 @@ public class ThreadChenillard extends Thread {
     }
 
     public void changeChaserSpeed(double speed) {
-        this.speed = speed;
+        double newSpeed = this.speed + 0.25 * speed; // speed = -1 ou 1
+        if(newSpeed < 0.25 || newSpeed > 1) return;
+        this.speed = newSpeed;
         System.out.println("Changed chaser speed to " + this.speed);
         ServerCommand toSend = new ServerCommand("speed", this.speed);
         remote.sendText(gson.toJson(toSend));
@@ -138,13 +133,16 @@ public class ThreadChenillard extends Thread {
                         break;
                 }
 
+
+                /*  Ancienne implémentation : le serveur actualise lui-même les LEDs (sans attendre la réponse du KNX)
                 boolean[] LEDs = new boolean[4];
                 Arrays.fill(LEDs, Boolean.FALSE);
                 for (int led : activeLeds) {
                     LEDs[led] = true;
                 }
                 ServerCommand toSend = new ServerCommand("LEDStatus", LEDs);
-                remote.sendText(gson.toJson(toSend));
+                // remote.sendText(gson.toJson(toSend));
+                 */
 
                 for (int led : previousLeds) {
                     if (!(activeLeds.contains(led))) {
@@ -157,8 +155,8 @@ public class ThreadChenillard extends Thread {
                     }
                 }
 
-                //for (int led : ledsOff) processCommunication.ecrireKNXdata("0/0/" + (led + 1), false);
-                //for (int led : ledsOn) processCommunication.ecrireKNXdata("0/0/" + (led + 1), true);
+                for (int led : ledsOff) processCommunication.ecrireKNXdata("0/0/" + (led + 1), false);
+                for (int led : ledsOn) processCommunication.ecrireKNXdata("0/0/" + (led + 1), true);
 
                 try {
                     Thread.sleep((long) (250 * (1 / speed)));
