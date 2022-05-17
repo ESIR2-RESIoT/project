@@ -1,16 +1,18 @@
 package com.esir.resiot;
 
-import javax.websocket.RemoteEndpoint;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import tuwien.auto.calimero.KNXException;
-import java.util.*;
+
+import javax.websocket.RemoteEndpoint;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ThreadChenillard extends Thread {
     private final GsonBuilder builder = new GsonBuilder();
     private final Gson gson = builder.create();
+    Random r = new Random();
 
     public enum Directions {
         L2R("Gauche -> Droite"),
@@ -33,12 +35,8 @@ public class ThreadChenillard extends Thread {
         }
     }
 
-    /*
-    remote is the client connected to the server via websocket.
-    It is null until a websocket connection is created.
-     */
-
     volatile boolean running = false;
+    int nbleds = 1;
     double speed = 0.5;
     private int L_Rdirection = 1;
     Directions direction = Directions.L2R;
@@ -46,9 +44,9 @@ public class ThreadChenillard extends Thread {
     List<Integer> previousLeds = new ArrayList<Integer>();
     List<Integer> ledsOff = new ArrayList<Integer>();
     List<Integer> ledsOn = new ArrayList<Integer>();
-    Random r = new Random();
-    private RemoteEndpoint.Async remote;
-    private ProcessCommunication processCommunication;
+
+    private RemoteEndpoint.Async remote; // Client connecté depuis l'Appli Web
+    private ProcessCommunication processCommunication; // Communication avec le KNX
 
     public ThreadChenillard() throws KNXException, InterruptedException {
         processCommunication = new ProcessCommunication(this);

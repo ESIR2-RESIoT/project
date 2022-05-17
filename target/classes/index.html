@@ -7,13 +7,30 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script type="text/javascript" src="websocket.js"></script>
     <style>
-        .img {
-          display: block;
+
+        .chenillard {
+          border: 3px solid black;
+          columns: 4;
           margin-left: auto;
           margin-right: auto;
           text-align: center;
         }
-        </style>
+
+        .img{
+            width: 50%;
+            height: 50%;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        h1 {text-align: center;}
+
+
+    </style>
 </head>
 <body>
 <div class="container body-content">
@@ -22,26 +39,25 @@
             <h1>Projet RESIoT</h1>
         </div>
         <div class="row justify-content-start" style="padding-top:50px;">
-            <div class="d-grid gap-2" style="padding-bottom:15px;">
+            <div class="d-grid gap-2">
                 <input type="button" class="btn btn-success btn-lg" id="connect" value="Connexion" onclick="">
                 <input type="button" class="btn btn-danger btn-lg" id="disconnect" value="Déconnexion" onclick=""
                        disabled="disabled">
             </div>
-            <input type="button" id="startChenillard" class="btn btn-success btn-lg btn-block"
-                value="Etat : Arrêt" onclick="" disabled="disabled">
-            <div style="padding-top:10px;">
-            </div>
-            <input type="button" id="sensChenillard" class="btn btn-warning btn-lg btn-block"
-                value="Mode : Gauche -> Droite" onclick="" disabled="disabled">
+            <div class="d-grid gap-2" style="padding-top:10px;">
+                <input type="button" id="startChenillard" class="btn btn-success btn-lg btn-block"
+                       value="Etat : Arrêt" onclick="" disabled="disabled">
+                <input type="button" id="sensChenillard" class="btn btn-warning btn-lg btn-block"
+                       value="Mode : Gauche -> Droite" onclick="" disabled="disabled">
 
-            <div class="container" style="padding-top:10px;">
-                <div class="row">
-                    <div class="col-8 alert alert-primary">
+                <div class="col-8 alert alert-primary" style="width: auto;">
+                    <div class="center">
                         <input type="button" id="decreaseSpeed" class="btn btn-dark btn-lg btn-block"
-                                value="Diminuer" onclick="" disabled="disabled">
-                        <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%" disabled="disabled">
+                               value="Diminuer" onclick="" disabled="disabled">
+                        <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%"
+                               disabled="disabled">
                         <input type="button" id="increaseSpeed" class="btn btn-dark btn-lg btn-block"
-                                value="Augmenter" onclick="" disabled="disabled">
+                               value="Augmenter" onclick="" disabled="disabled">
                     </div>
                 </div>
             </div>
@@ -49,43 +65,73 @@
 
         </div>
         <div style="padding-top:15px;">
-            <div class="alert alert-primary">
-                Affichage en temps réel des LED :
-            </div>
+
         </div>
 
-        <div class = "img">
-            <img id="led0" src="images/led_red.png">
-            <img id="led1" src="images/led_red.png">
-            <img id="led2" src="images/led_red.png">
-            <img id="led3" src="images/led_red.png">
+        <div class="chenillard">
+                <div class = "row">
+                    <img class = "img" id="led0on" src="images/led_green.png">
+                    <img class = "img" id="led0off" src="images/led_red.png">
+                </div>
+                <div class = "row">
+                    <img class = "img" id="led1on" src="images/led_green.png">
+                    <img class = "img" id="led1off" src="images/led_red.png">
+                </div>
+                <div class = "row">
+                    <img class = "img" id="led2on" src="images/led_green.png">
+                    <img class = "img" id="led2off" src="images/led_red.png">
+                </div>
+                <div class = "row">
+                    <img class = "img" id="led3on" src="images/led_green.png">
+                    <img class = "img" id="led3off" src="images/led_red.png">
+                </div>
+
+            </div>
+
         </div>
         <div class="row justify-content-start" style="padding-top:10px;">
-            <div class="col" style="padding-top:250px;">
+            <div class="col" style="padding-top:200px;">
                 <h2>Objectif</h2>
-                <div class="row justify-content-start" style="padding-top:100px;">
-                    <p>L'objectif du projet est, à partir de la page web, commander le KNX qui lance ou arrète un chenillard de
-                        DEL</p>
+                <div class="row justify-content-start" style="padding-top:10px;">
+                    <p>L'objectif du projet est, à partir de cette page web, de commander la maquette KNX qui lance ou
+                        arrête un chenillard de
+                        4 LED</p>
                     <p>Plusieurs étapes permettent de mener à bien le projet :</p>
                     <ul>
                         <li>1. Choix des langages de programmation</li>
                         <li>2. Création d'un serveur web</li>
-                        <li>3. Création d'une page web pour commander le KNX</li>
-                        <li>4. Mettre en place la partie asynchrone</li>
+                        <li>3. Création d'une page web pour commander la maquette KNX</li>
+                        <li>4. Mettre en place l'asynchrone</li>
                     </ul>
                 </div>
+                <div class="col" style="padding-top:200px;">
 
-                <h2>Architecture</h2>
-                <img src="images/architecture.png" alt="Architecture" width="auto" height="850">
-            </div>
-            <div class="col" style="padding-top:250px;">
-                <h2>A propos</h2>
-                <label>Un projet réalisé par Mathis Certenais et Matéo Fontanel</label>
+                    <h2>Architecture</h2>
+                    <img src="../../../architecture/architecture.png" alt="Architecture" width="100%" height="100%">
+                </div>
+                <div class="col" style="padding-top:250px; padding-bottom: 100px;">
+                    <h2>A propos</h2>
+                    <label>Un projet réalisé par Mathis Certenais et Matéo Fontanel</label>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
+    <script type="text/javascript">
+
+    $("led0on").style.visibility = "hidden"
+    $("led0on").style.width = "0%"
+    $("led0on").style.height = "0%"
+    $("led1on").style.visibility = "hidden"
+    $("led1on").style.width = "0%"
+    $("led1on").style.height = "0%"
+    $("led2on").style.visibility = "hidden"
+    $("led2on").style.width = "0%"
+    $("led2on").style.height = "0%"
+    $("led3on").style.visibility = "hidden"
+    $("led3on").style.width = "0%"
+    $("led3on").style.height = "0%"
+
     var chaserState = false
 
     $("connect").onclick = function(event) { wstool.connect() }
@@ -99,6 +145,7 @@
     $("increaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(1)) };
     $("decreaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(-1))};
     $("sensChenillard").onclick = function(event) { httpPost("direction","") }
-</script>
+
+    </script>
 </body>
 </html>

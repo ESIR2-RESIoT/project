@@ -1,14 +1,9 @@
 package com.esir.resiot;
 
-import javax.websocket.CloseReason;
-import javax.websocket.Endpoint;
-import javax.websocket.EndpointConfig;
-import javax.websocket.MessageHandler;
-import javax.websocket.RemoteEndpoint;
-import javax.websocket.Session;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import javax.websocket.*;
 
 public class Websocket extends Endpoint implements MessageHandler.Whole<String>
 {

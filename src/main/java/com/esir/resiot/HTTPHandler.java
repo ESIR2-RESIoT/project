@@ -13,17 +13,16 @@ package com.esir.resiot;
 // You may elect to redistribute this code under either of these licenses.
 // ========================================================================
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import tuwien.auto.calimero.KNXException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 
 public class HTTPHandler extends AbstractHandler

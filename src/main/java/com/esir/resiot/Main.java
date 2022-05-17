@@ -1,17 +1,5 @@
 package com.esir.resiot;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Objects;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.websocket.DeploymentException;
-import javax.websocket.server.ServerContainer;
-import javax.websocket.server.ServerEndpointConfig;
-
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -19,13 +7,21 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer;
-
 import tuwien.auto.calimero.KNXException;
+
+import javax.servlet.ServletException;
+import javax.websocket.DeploymentException;
+import javax.websocket.server.ServerContainer;
+import javax.websocket.server.ServerEndpointConfig;
+import java.net.InetSocketAddress;
+import java.net.URL;
+import java.util.Objects;
 
 public class Main
 {
     public static void main(String[] args) throws ServletException, DeploymentException, KNXException, InterruptedException {
-        Server server = new Server(8080);
+        final InetSocketAddress inetSocketAddress = new InetSocketAddress("127.0.0.1", 8080);
+        Server server = new Server(inetSocketAddress);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");

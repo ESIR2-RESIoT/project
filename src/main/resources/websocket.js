@@ -20,16 +20,21 @@ function getKeyCode(ev) {
 }
 
 function httpPost(route, body){
-        try{
-            var url = "http://localhost:8080/"+route;
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", url, true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.send(body);
-            }catch(e){
-                console.log(e)
-            }
+    try{
+        var url = "http://127.0.0.1:8080/"+route;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(body);
+        }catch(e){
+            console.log(e)
         }
+    }
+
+
+wstool = {}
+wstool = {"connect":function()}
+wstool = {"connect":function(), "_ws":{}}
 
 var wstool = {
 
@@ -44,7 +49,7 @@ var wstool = {
             this._ws.onopen = this._onopen;
             this._ws.onmessage = this._onmessage;
             this._ws.onclose = this._onclose;
-            this._ws.url = "ws://localhost:8080/"
+            this._ws.url = "ws://127.0.0.1:33/"
             this.setState(true)
         } catch (exception) {
             wstool.log("error", "Connect Error: " + exception);
@@ -103,8 +108,21 @@ var wstool = {
                     break;
 
                 case "singleLedStatus":
-                    let color = response.args[1] ? "images/led_green.png" : "images/led_red.png"
-                    $("led"+response.args[0]).setAttribute("src",color)
+                    if(!(response.args[1])){
+                        $("led"+response.args[0]+"on").style.visibility = "hidden"
+                        $("led"+response.args[0]+"on").style.width = "0%"
+                        $("led"+response.args[0]+"on").style.height = "0%"
+                        $("led"+response.args[0]+"off").style.visibility = "visible"
+                        $("led"+response.args[0]+"off").style.width = "50%"
+                        $("led"+response.args[0]+"off").style.height = "50%"
+                    }else{
+                        $("led"+response.args[0]+"off").style.visibility = "hidden"
+                        $("led"+response.args[0]+"off").style.width = "0%"
+                        $("led"+response.args[0]+"off").style.height = "0%"
+                        $("led"+response.args[0]+"on").style.visibility = "visible"
+                        $("led"+response.args[0]+"on").style.width = "50%"
+                        $("led"+response.args[0]+"on").style.height = "50%"
+                    }
                 break;
 
                 case "status":

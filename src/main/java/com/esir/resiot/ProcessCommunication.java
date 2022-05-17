@@ -16,11 +16,6 @@ package com.esir.resiot;
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import tuwien.auto.calimero.DetachEvent;
@@ -35,6 +30,10 @@ import tuwien.auto.calimero.process.ProcessEvent;
 import tuwien.auto.calimero.process.ProcessListener;
 
 import javax.websocket.RemoteEndpoint;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Example of Calimero process communication, we read (and write) a boolean datapoint in the KNX network. By default,
@@ -45,7 +44,6 @@ public class ProcessCommunication
     private final GsonBuilder builder = new GsonBuilder();
     private final Gson gson = builder.create();
     // Address of your KNXnet/IP server. Replace the IP host or address as necessary.
-    private static final String remoteHost = "192.168.0.201";
 
     // We will read a boolean from the KNX datapoint with this group address, replace the address as necessary.
     // Make sure this datapoint exists, otherwise you will get a read timeout!
@@ -56,7 +54,7 @@ public class ProcessCommunication
 
     public ProcessCommunication(ThreadChenillard thread){
 
-        final InetSocketAddress remote = new InetSocketAddress(remoteHost, 3671);
+        final InetSocketAddress remote = new InetSocketAddress("192.168.0.202", 3671);
         // Create our network link, and pass it to a process communicator
         try{
             knxLink = KNXNetworkLinkIP.newTunnelingLink(null, remote, false, new TPSettings());
@@ -76,7 +74,6 @@ public class ProcessCommunication
                 public void groupWrite(ProcessEvent processEvent) {
                     System.out.println("groupWrite");
                     String group = processEvent.getDestination().toString();
-
 
                         switch(group){
                             case "1/0/1": // appui bouton 1
