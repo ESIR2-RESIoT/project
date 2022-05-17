@@ -22,7 +22,7 @@ public class  MainActivity extends Activity {
         WebViewClientImpl webViewClient = new WebViewClientImpl(this);
         webView.setWebViewClient(webViewClient);
 
-        webView.loadUrl("https://mathiscertenais.github.io/");
+        webView.loadUrl("192.168.0.108:3030"); //https://mathiscertenais.github.io/
     }
 
 

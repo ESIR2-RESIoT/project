@@ -52,17 +52,6 @@
 
                 <div class="col-8 alert alert-primary" style="width: auto;">
                     <div class="center">
-                        <input type="button" id="oneLED" class="btn btn-dark btn-lg btn-block"
-                                value="1 LED" onclick="" disabled="disabled">
-                        <input type="button" id="twoLED" class="btn btn-dark btn-lg btn-block"
-                                value="2 LED" onclick="" disabled="disabled">
-                        <input type="button" id="threeLED" class="btn btn-dark btn-lg btn-block"
-                                value="3 LED" onclick="" disabled="disabled">
-                    </div>
-                </div>
-
-                <div class="col-8 alert alert-primary" style="width: auto;">
-                    <div class="center">
                         <input type="button" id="decreaseSpeed" class="btn btn-dark btn-lg btn-block"
                                value="Diminuer" onclick="" disabled="disabled">
                         <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%"
@@ -155,10 +144,7 @@
 
     $("increaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(1)) };
     $("decreaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(-1))};
-    $("sensChenillard").onclick = function(event) { httpPost("direction","") };
-    $("oneLED").onclick = function(event) { httpPost("nbleds","1") };
-    $("twoLED").onclick = function(event) { httpPost("nbleds","2") };
-    $("threeLED").onclick = function(event) { httpPost("nbleds","3") };
+    $("sensChenillard").onclick = function(event) { httpPost("direction","") }
 
     </script>
 </body>
