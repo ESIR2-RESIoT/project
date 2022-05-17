@@ -1,67 +1,53 @@
 if (!window.WebSocket && window.MozWebSocket) {
     window.WebSocket = window.MozWebSocket;
 }
-
 if (!window.WebSocket) {
     alert("WebSocket not supported by this browser");
 }
-
 function $() {
     return document.getElementById(arguments[0]);
 }
 function $F() {
     return document.getElementById(arguments[0]).value;
 }
-
 function getKeyCode(ev) {
     if (window.event)
         return window.event.keyCode;
     return ev.keyCode;
 }
-
 function httpPost(route, body){
-    try{
-        var url = "http://127.0.0.1:8080/"+route;
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", url, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(body);
-        }catch(e){
-            console.log(e)
+        try{
+            var url = "http://localhost:8080/"+route;
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(body);
+            }catch(e){
+                console.log(e)
+            }
         }
-    }
-
-
-wstool = {}
-wstool = {"connect":function()}
-wstool = {"connect":function(), "_ws":{}}
-
 var wstool = {
-
     // Ouverture de websocket client
     connect : function() {
         var location = document.location.toString().replace('http://', 'ws://') + "test";
         wstool.log("info", "Document URI: " + document.location);
         wstool.log("info", "WS URI: " + location);
-
         try {
             this._ws = new WebSocket(location);
             this._ws.onopen = this._onopen;
             this._ws.onmessage = this._onmessage;
             this._ws.onclose = this._onclose;
-            this._ws.url = "ws://127.0.0.1:33/"
+            this._ws.url = "ws://localhost:8080/"
             this.setState(true)
         } catch (exception) {
             wstool.log("error", "Connect Error: " + exception);
         }
     },
-
     // Fermeture du websocket
     close : function() {
         this._ws.close(1000);
         this.setState(false)
     },
-
     // Accessibilité des boutons selon l'état de la connexion
     setState : function(enabled) {
         $('connect').disabled = enabled;
@@ -71,12 +57,10 @@ var wstool = {
         $('increaseSpeed').disabled = !enabled;
         $('decreaseSpeed').disabled = !enabled;
     },
-
     // Debug côté client
     log: function(type, message){
         console.log("["+type+"] "+message)
     },
-
     // A l'ouverture du websocket
     _onopen : function() {
         wstool.setState(true);
@@ -91,45 +75,27 @@ var wstool = {
             wstool.log("client", message);
         }
     },
-
     // Communication serveur -> client
     _onmessage : function(m) {
         if (m.data) {
             //wstool.log("server", m.data);
             var response = JSON.parse(m.data);
             console.log(response);
-
             switch(response.command){
                 case "LEDStatus":
                     for(let i = 0; i < 4; i++){
-                        let color = response.args[i] ? "images/led_green.png" : "images/led_red.png"
-                        $("led"+i).setAttribute("src",color)
+                        $("led"+i).src = response.args[i] ? "images/led_green.png" : "images/led_red.png"
                     }
                     break;
 
                 case "singleLedStatus":
-                    if(!(response.args[1])){
-                        $("led"+response.args[0]+"on").style.visibility = "hidden"
-                        $("led"+response.args[0]+"on").style.width = "0%"
-                        $("led"+response.args[0]+"on").style.height = "0%"
-                        $("led"+response.args[0]+"off").style.visibility = "visible"
-                        $("led"+response.args[0]+"off").style.width = "50%"
-                        $("led"+response.args[0]+"off").style.height = "50%"
-                    }else{
-                        $("led"+response.args[0]+"off").style.visibility = "hidden"
-                        $("led"+response.args[0]+"off").style.width = "0%"
-                        $("led"+response.args[0]+"off").style.height = "0%"
-                        $("led"+response.args[0]+"on").style.visibility = "visible"
-                        $("led"+response.args[0]+"on").style.width = "50%"
-                        $("led"+response.args[0]+"on").style.height = "50%"
-                    }
+                    $("led"+response.args[0]).src = response.args[1] ? "images/led_green.png" : "images/led_red.png"
                 break;
 
                 case "status":
                     let status = response.args ? "Marche" : "Arrêt"
                     $("startChenillard").value = "Etat : "+status
                     break;
-
                 case "direction":
                     $("sensChenillard").value = "Mode : "+response.args
                     break;
@@ -151,14 +117,12 @@ var wstool = {
             }
         }
     },
-
     // Fermeture du websocket
     _onclose : function(closeEvent) {
         this._ws = null;
         wstool.setState(false);
         wstool.log("info", "Websocket Closed");
         wstool.log("info", "  .wasClean = " + closeEvent.wasClean);
-
         var codeMap = {};
         codeMap[1000] = "(NORMAL)";
         codeMap[1001] = "(ENDPOINT_GOING_AWAY)";

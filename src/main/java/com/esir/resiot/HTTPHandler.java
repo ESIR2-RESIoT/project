@@ -60,6 +60,7 @@ public class HTTPHandler extends AbstractHandler
                     break;
 
                 case "/speed":
+                    System.out.println(Double.parseDouble(body));
                     thread.changeChaserSpeed(Double.parseDouble(body));
                     break;
             }

@@ -7,30 +7,18 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script type="text/javascript" src="websocket.js"></script>
     <style>
-
-        .chenillard {
-          border: 3px solid black;
-          columns: 4;
+        .img {
+          display: block;
           margin-left: auto;
           margin-right: auto;
           text-align: center;
         }
 
-        .img{
-            width: 50%;
-            height: 50%;
-            margin-top: 3px;
-            margin-bottom: 3px;
-        }
-
         .center {
             text-align: center;
         }
-
         h1 {text-align: center;}
-
-
-    </style>
+        </style>
 </head>
 <body>
 <div class="container body-content">
@@ -54,47 +42,29 @@
                     <div class="center">
                         <input type="button" id="decreaseSpeed" class="btn btn-dark btn-lg btn-block"
                                value="Diminuer" onclick="" disabled="disabled">
-                        <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%"
-                               disabled="disabled">
+                        <input id="speedLabelButton" class="btn btn-secondary btn-lg" value="Vitesse : 50%" disabled="disabled">
                         <input type="button" id="increaseSpeed" class="btn btn-dark btn-lg btn-block"
                                value="Augmenter" onclick="" disabled="disabled">
                     </div>
                 </div>
             </div>
 
-
         </div>
         <div style="padding-top:15px;">
 
         </div>
 
-        <div class="chenillard">
-                <div class = "row">
-                    <img class = "img" id="led0on" src="images/led_green.png">
-                    <img class = "img" id="led0off" src="images/led_red.png">
-                </div>
-                <div class = "row">
-                    <img class = "img" id="led1on" src="images/led_green.png">
-                    <img class = "img" id="led1off" src="images/led_red.png">
-                </div>
-                <div class = "row">
-                    <img class = "img" id="led2on" src="images/led_green.png">
-                    <img class = "img" id="led2off" src="images/led_red.png">
-                </div>
-                <div class = "row">
-                    <img class = "img" id="led3on" src="images/led_green.png">
-                    <img class = "img" id="led3off" src="images/led_red.png">
-                </div>
-
-            </div>
-
+        <div class = "img">
+            <img id="led0" src="images/led_red.png" width="15%" height="15%">
+            <img id="led1" src="images/led_red.png" width="15%" height="15%">
+            <img id="led2" src="images/led_red.png" width="15%" height="15%">
+            <img id="led3" src="images/led_red.png" width="15%" height="15%">
         </div>
         <div class="row justify-content-start" style="padding-top:10px;">
             <div class="col" style="padding-top:200px;">
                 <h2>Objectif</h2>
                 <div class="row justify-content-start" style="padding-top:10px;">
-                    <p>L'objectif du projet est, à partir de cette page web, de commander la maquette KNX qui lance ou
-                        arrête un chenillard de
+                    <p>L'objectif du projet est, à partir de cette page web, commander la maquette KNX qui lance ou arrête un chenillard de
                         4 LED</p>
                     <p>Plusieurs étapes permettent de mener à bien le projet :</p>
                     <ul>
@@ -105,7 +75,6 @@
                     </ul>
                 </div>
                 <div class="col" style="padding-top:200px;">
-
                     <h2>Architecture</h2>
                     <img src="../../../architecture/architecture.png" alt="Architecture" width="100%" height="100%">
                 </div>
@@ -118,34 +87,33 @@
     </div>
 </div>
     <script type="text/javascript">
-
-    $("led0on").style.visibility = "hidden"
-    $("led0on").style.width = "0%"
-    $("led0on").style.height = "0%"
-    $("led1on").style.visibility = "hidden"
-    $("led1on").style.width = "0%"
-    $("led1on").style.height = "0%"
-    $("led2on").style.visibility = "hidden"
-    $("led2on").style.width = "0%"
-    $("led2on").style.height = "0%"
-    $("led3on").style.visibility = "hidden"
-    $("led3on").style.width = "0%"
-    $("led3on").style.height = "0%"
-
     var chaserState = false
-
+    var speed = 0.5
     $("connect").onclick = function(event) { wstool.connect() }
     $("disconnect").onclick = function(event) { wstool.close() }
-
     $("startChenillard").onclick = function(event) {
         chaserState = !chaserState
         httpPost("state",JSON.stringify(chaserState))
     };
-
-    $("increaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(1)) };
-    $("decreaseSpeed").onclick = function(event) { httpPost("speed",JSON.stringify(-1))};
+    $("increaseSpeed").onclick = function(event) {
+        speed += 0.25
+        if(speed == 1){
+            $("increaseSpeed").disabled = true
+        }else{
+            $("decreaseSpeed").disabled = false
+        }
+        httpPost("speed",JSON.stringify(speed))
+    };
+    $("decreaseSpeed").onclick = function(event) {
+        speed -= 0.25
+        if(speed == 0.25){
+            $("decreaseSpeed").disabled = true
+        }else{
+            $("increaseSpeed").disabled = false
+        }
+        httpPost("speed",JSON.stringify(speed))
+    };
     $("sensChenillard").onclick = function(event) { httpPost("direction","") }
-
-    </script>
+</script>
 </body>
 </html>

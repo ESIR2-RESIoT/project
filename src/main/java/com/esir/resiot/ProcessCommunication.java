@@ -53,8 +53,7 @@ public class ProcessCommunication
 
 
     public ProcessCommunication(ThreadChenillard thread){
-
-        final InetSocketAddress remote = new InetSocketAddress("192.168.0.202", 3671);
+        final InetSocketAddress remote = new InetSocketAddress("192.168.0.201", 3671);
         // Create our network link, and pass it to a process communicator
         try{
             knxLink = KNXNetworkLinkIP.newTunnelingLink(null, remote, false, new TPSettings());

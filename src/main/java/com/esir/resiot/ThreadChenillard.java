@@ -79,9 +79,7 @@ public class ThreadChenillard extends Thread {
     }
 
     public void changeChaserSpeed(double speed) {
-        double newSpeed = this.speed + 0.25 * speed; // speed = -1 ou 1
-        if(newSpeed < 0.25 || newSpeed > 1) return;
-        this.speed = newSpeed;
+        this.speed = speed;
         System.out.println("Changed chaser speed to " + this.speed);
         ServerCommand toSend = new ServerCommand("speed", this.speed);
         remote.sendText(gson.toJson(toSend));
