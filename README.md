@@ -101,17 +101,22 @@ Here's a blank template to get started:
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Présentation
 
-To get a local copy up and running follow these simple steps.
+Sur un module d'une vingtaine d'heure, nous avons réalisé un projet en lien avec la spécialité Internet of Things. L'objectif du projet est, à partir d'une page Internet ou de boutons poussoirs, de commander la maquette KNX qui commande 4 LED. 
 
-### Prerequisites
+Plusieurs étapes permettent de mener à bien le projet :
+1. Choix des langages de programmation
+2. Création d'un serveur web
+3. Création d'une page web pour commander la maquette KNX
+4. Mettre en place l'asynchrone
+### Fonctionnalités
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Afin d'assurer un maximum d'intéraction entre l'utilisateur et l'interface web, nous avons développé des fonctionnalités :
+1. Connexion - Déconnexion à la maquette
+2. Allumer - Éteindre les LED
+3. Changer le mode de fonctionnement (chenillard de gauche vers la droite et inversement, mode flipper et random)
+4. Augmenter - Diminuer la vitesse
 
 ### Installation
 
@@ -124,7 +129,8 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 
-
+### Application Installation
+Download the APK 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -136,9 +142,10 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 
 <!-- ROADMAP -->
-## Roadmap
+## Architecture
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a list of proposed features (and known issues).
+Nous pouvons voir ci-dessous l'architecture génnéral du projet :
+ ![Screenshot](architecture/architecture_generale.png) 
 
 
 
@@ -165,11 +172,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
+Mathis Certenais - [@linkedin_handle](https://www.linkedin.com/in/mathiscertenais/) - email
 
