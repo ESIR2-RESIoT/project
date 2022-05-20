@@ -56,5 +56,5 @@ Nous pouvons voir ci-dessous l'architecture général du projet :
 
 ## Contact
 
-Mathis Certenais - [@linkedin_handle](https://www.linkedin.com/in/mathiscertenais/)
-Mateo Fontanel - [@linkedin_handle](https://www.linkedin.com/in/mat%C3%A9o-fontanel-2913b914a/?originalSubdomain=fr)
+[@Mathis Certenais](https://www.linkedin.com/in/mathiscertenais/)
+[@Mateo Fontanel](https://www.linkedin.com/in/mat%C3%A9o-fontanel-2913b914a/?originalSubdomain=fr)
