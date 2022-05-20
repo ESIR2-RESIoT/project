@@ -17,9 +17,10 @@
 Sur un module d'une vingtaine d'heure, nous avons réalisé un projet en lien avec la spécialité Internet of Things. L'objectif du projet est, à partir d'une page Internet ou de boutons poussoirs, de piloter la maquette KNX qui commande 4 LED. 
 
 Plusieurs étapes permettent de mener à bien le projet :
-1. Choix des langages de programmation
-2. Création d'un serveur web
-3. Création d'une page web pour commander la maquette KNX
+1. Réalisation de l’architecture
+2. Choix des langages de programmation
+3. Création d'un serveur
+4. Création d'une page web pour commander la maquette KNX
 5. Communication client - serveur
 6. Communication serveur - maquette KNX
 
@@ -39,8 +40,10 @@ Afin d'assurer un maximum d'intéraction entre l'utilisateur et l'interface web,
    git clone https://github.com/ESIR2-RESIoT/project.git
    ```
 2. Ouvrir le répertoire avec IntelliJ
-3. Ajouter une nouvelle configuration
-4. Se connecter au routeur de la maquette KNX, puis lancer le serveur
+3. Ajouter une nouvelle configuration sur le logiciel :
+![Screenshot](architecture/intellij/configuration1.png)
+![Screenshot](architecture/intellij/configuration2.png)
+6. Se connecter au routeur de la maquette KNX, puis lancer le serveur
 
 ## Installation de l'application mobile
 Installer l'APK qui se trouve dans le dossier mobile_app
