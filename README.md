@@ -1,7 +1,7 @@
 <h1>Projet RESIoT</h1>
 <!-- TABLE OF CONTENTS -->
 <details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+  <summary><h2 style="display: inline-block">Table des matières</h2></summary>
   <ol>
     <li><a href="#Présentation">Présentation</a></li>
     <li><a href="#Fonctionnalités">Fonctionnalités</a></li>
